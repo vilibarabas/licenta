@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+  <?php
+    include "controller/controller.php";
+    $controller = new Controller();
+  ?>
 
 
 <form action="" method="post" name="Login_Form">
@@ -23,18 +28,18 @@
 
 <?php
      
-    session_start();
-    
+   
 	if(isset($_POST['Submit']))
-    {
-		$logins = array('Alex' => '123456','username1' => 'password1','username2' => 'password2');
-	
+    {      
 		$Username = isset($_POST['Username']) ? $_POST['Username'] : '';
 		$Password = isset($_POST['Password']) ? $_POST['Password'] : '';
 		
-		if (isset($logins[$Username]) && $logins[$Username] == $Password)
+		
+        $rez = $controller->verifyUsers($Username, $Password);
+		
+		if (!empty($rez))
         {
-			$_SESSION['UserData']['Username'] = $logins[$Username];
+			$_SESSION['UserData'] = $rez[0];
 			header("location:index.php");
 		}
         else
