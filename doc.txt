@@ -1,0 +1,8 @@
+functii:
+
+admin(0) all acces
+manager (1) 
+team leader acces la proiectele proprii si la subalternii sai
+programator acces la propriile proiecte
+operator acces la propriul profil
+     
