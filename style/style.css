@@ -1,5 +1,12 @@
-#contor_table
-{
+#contor_table{
     width: 60%;
     margin: 0 auto;
+    border: 1px solid black;
 }
+
+#contor_table td{
+    background-color: #A5A5A5;
+    width:33%;
+       
+}
+

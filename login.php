@@ -2,6 +2,7 @@
   <?php
     include "controller/controller.php";
     $controller = new Controller();
+    
   ?>
 
 
@@ -34,7 +35,7 @@
 		$Username = isset($_POST['Username']) ? $_POST['Username'] : '';
 		$Password = isset($_POST['Password']) ? $_POST['Password'] : '';
 		
-		
+      		
         $rez = $controller->verifyUsers($Username, $Password);
 		
 		if (!empty($rez))
