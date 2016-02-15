@@ -109,9 +109,72 @@ class Model
     {
         return $result = $this->dataBase->from($table)
                                  ->where('end_time')->isNot('')
-                                 ->andWhere('start_time')->like('%'. $data = date("d-m-Y").'%')
+                                 ->andWhere('start_time')->like('%'. date("d-m-Y").'%')
                                  ->select()
                                  ->all();
+    }
+
+    public function getAllWorking($table)
+    {
+        return $result = $this->dataBase->from($table)
+                                 ->andWhere('start_time')->like('%'. date("-m-Y").'%')
+                                 ->select()
+                                 ->all();   
+    }
+
+    public function getTaskFromUser($id)
+    {
+        return $this->dataBase->from('users_task_manager')
+                                 ->where('user_id')->is($id)
+                                 ->select()
+                                 ->all();   
+    }
+    public function getTask($id, $user_id)
+    {
+        if($id != -1)
+        {
+            $rez = $this->dataBase->from('users_task_manager')
+                                 ->where('id')->is($id)
+                                 ->select()
+                                 ->all();
+            return $rez[0];
+        }   
+        else
+        {
+            $rez = $this->dataBase->from('users_task_manager')
+                                 ->where('user_id')->is($user_id)
+                                 ->select()
+                                 ->all();
+
+            return $rez[count($rez)-1];
+        }
+    }
+    public function getStatus($id)
+    {
+        $status =  $this->dataBase->from('all_status')
+                                 ->where('status_id')->is($id)
+                                 ->select('status_name')
+                                 ->all();        
+        return $status[0]->status_name;
+    }
+
+    public function getAllStatus()
+    {
+        return $status =  $this->dataBase->from('all_status')
+                                 ->select()
+                                 ->all();        
+    }
+
+    public function saveTaskChange($status, $id, $percent, $description, $observation)
+    {
+        $this->dataBase->update('users_task_manager')
+                    ->where('id')->is($id)
+                    ->set(array(
+                             'status' => $status,
+                             'percent' => $percent,
+                             'description' => $description,
+                             'observation' => $observation
+                             ));
     }
 }
 //

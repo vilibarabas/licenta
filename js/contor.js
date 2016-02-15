@@ -1,7 +1,7 @@
 var m1 ;
 var h1 ;
 var s1 ;
-var stop = 0;
+var stop =0;
 function startTime() {
     var today = new Date();
     var h = today.getHours();
@@ -10,6 +10,8 @@ function startTime() {
 
     if (m1 != undefined && stop == 0)
     {
+        msg = 'Contorul este Pornit';
+        color = '#00e600';
         h = h - h1;
         m = checkTime(m) - checkTime(m1);
         
@@ -25,12 +27,18 @@ function startTime() {
             s = 60 + s;
             m -= 1;
         }
-        
+        if(s%2 == 0)
+        {
+            document.getElementById('msg_box').style.color = color;
+        }
+        else
+        {
+            document.getElementById('msg_box').style.color = 'white';
+        }
         hp = (h < 10) ? "0" : "";
         hm = (m < 10) ? "0" : "";
         hs = (s < 10) ? "0" : "";
-        msg = 'Contorul este Pornit';
-        color = '#00e600';
+        
     }
     else
     {
@@ -40,6 +48,7 @@ function startTime() {
         h = '00';
         m = '00';
         s = '00';
+        document.getElementById('msg_box').style.color = 'white';
         msg = 'Contorul este oprit';
         color = 'red';
     }
@@ -63,7 +72,6 @@ function clickStart()
     s1 = today.getSeconds();
     document.getElementById("start_button").style.display = "none";
     document.getElementById("stop_button").style.display  = "block";
-    
 }
 
 function clickstop()

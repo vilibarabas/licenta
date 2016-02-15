@@ -31,20 +31,20 @@
      
    
 	if(isset($_POST['Submit']))
-    {      
+  {      
 		$Username = isset($_POST['Username']) ? $_POST['Username'] : '';
 		$Password = isset($_POST['Password']) ? $_POST['Password'] : '';
 		
       		
-        $rez = $controller->verifyUsers($Username, $Password);
+    $rez = $controller->verifyUsers($Username, $Password);
 		
 		if (!empty($rez))
-        {
+    {
 			$_SESSION['UserData'] = $rez[0];
 			header("location:index.php");
 		}
-        else
-        {
+    else
+    {
 			echo "<center><span style='color:red'>Invalid Login Details</span></center>";
 		}
 	}

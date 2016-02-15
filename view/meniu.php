@@ -8,7 +8,9 @@
         <ul class="nav navbar-nav">
           <li <?php echo $this->active == 'index' ? 'class="active"' : ''; ?>><a href="index.php">Home</a></li>
           <li><a href="#">Page 1</a></li>
-          <li><a href="#">Page 2</a></li>
+          <?php
+          
+           echo "<li ",   $this->active == 'profil' ? 'class="active"' : '', '><a href="profil.php?id=',  $_SESSION['UserData']->user_id,'">Profil</a></li>';?>
           <li <?php echo $this->active == 'contor' ? 'class="active"' : ''; ?>><a href="contor2.php">Contor</a></li>
           <li class=\"navbar-right\"></li>
         </ul>
