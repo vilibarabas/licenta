@@ -5,53 +5,73 @@ include "model/model.php";
 class Controller
 {
     public $active;
-    private $conectInfoUsers;
-    private $conectInfoContor;
+    private $conectInfo;
+    private $headElements;
+    private $page;
     public $model;
-    public function __construct()
+
+    public function __construct($page)
     {
+        $this->page = $page;
         
-        $this->conectInfoUsers = array(
+        $this->conectInfo = array(
                'host' => 'localhost',
                'database' => 'firma_database',
                'username' => 'root',
                'password' => '',
                );
-        $this->conectInfoContor = array(
-               'host' => 'localhost',
-               'database' => 'firma_users_time_manager',
-               'username' => 'root',
-               'password' => '',
-               );
-       $this->model = new Model($this->conectInfoUsers); 
+        $this->headElements = array(
+                          'profil' => array(
+                                            '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>',
+                                            '<script type="text/javascript" src="canvasjs/canvasjs.min.js"></script>',
+                                            '<script src="js/precent.js"></script>',
+                                            ),
+                          'contor' => array(
+                                            '',
+                                            ),
+                        );
+       $this->model = new Model($this->conectInfo); 
       session_start();
+
       echo '<head>
             <title>Licenta</title>
             <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
             <link rel="stylesheet" type="text/css" href="style/style.css">
+            <script src="js/ajax.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-          </head>';
+        ';
+       $this->addHead($page);
+      echo '</head>', PHP_EOL;
     }
     
+    private function addHead($page)
+    {
+        if(isset($this->headElements[$page]))
+            foreach($this->headElements[$page] as $val)
+            {
+                echo $val, PHP_EOL;
+            }
+    }
+
     public function verifyUsers($username, $password)
     {
-        $this->model = new Model($this->conectInfoUsers);
+        $this->model = new Model($this->conectInfo);
         $users = $this->model->getUser($username, $password);
         return $users;
         
     }
-    public function verifyContor($table)
+
+    public function verifyContor($id)
     {
 
-        $model = new Model($this->conectInfoContor);
-        $model->createContorTable($table);
-        return $model->verifyContor($table);
+        $model = new Model($this->conectInfo);
+        return $model->verifyContor($id);
     }
     
-    public function getMeniu($active)
+    public function getMeniu()
     {
-        $this->active = $active;
+        $this->active = $this->page;
         include 'view/meniu.php';
     }
     public function logOut()
@@ -74,12 +94,12 @@ class Controller
         
     }
 
-    public function getAllWorkingTime($table)
+    public function getAllWorkingTime($id)
     {
-        $model = new Model($this->conectInfoContor);
-        $result = $model->getAllWorking($table);
+        $model = new Model($this->conectInfo);
+        $result = $model->getAllWorking($id);
         
-        $inainte = '11111';
+        $inainte = '1111';
         if(!empty($result))
         {
             foreach($result as $rez)
@@ -117,7 +137,7 @@ class Controller
 
                     echo '<br><table id="contor_table" class="table table-bordered">
                         
-                        <tr style="background-color:#47d147">
+                        <tr class="header">
                             <th>
                                 <center>'. explode(' ',  $rez->start_time)[0]. '</center>
                                 
@@ -141,10 +161,10 @@ class Controller
         }
     }
 
-    public function getWorkingTimeToday($table)
+    public function getWorkingTimeToday($id)
     {
-        $model = new Model($this->conectInfoContor);
-        $result = $model->getWorking($table);
+        $model = new Model($this->conectInfo);
+        $result = $model->getWorking($id);
         $totalhr = 0;
         $totalmin = 0;
         $totalsec = 0;
@@ -207,7 +227,7 @@ class Controller
     public function getSelectTask($id)
     {
         
-        $this->model = new Model($this->conectInfoUsers);
+        $this->model = new Model($this->conectInfo);
         $select = $this->model->getTaskFromUser($id);
         if(!empty($select))
             foreach($select as $sel)

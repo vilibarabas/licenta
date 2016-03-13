@@ -27,24 +27,27 @@ class Model
         return $result;
     }
     
-    public function addTime($table, $date, $why)
+    public function addTime($id, $date, $why)
     {
 
-        $this->createContorTable($table);
         if($why)
         {
             $this->dataBase->insert(array(
+                                 'user_id' => $id,
                                  'start_time' => $date,
                                  'end_time' => ''
                                  ))
-                                 ->into($table);  
+                                 ->into('time_manager_all_users');  
         }
         else
         {
             $d = date("d-m-Y");
-            $this->dataBase->update($table)
-                        ->where('end_time')->is('')
-                        ->andWhere('start_time')->like("%". $d."%")
+            $this->dataBase->update('time_manager_all_users')
+                        ->where('user_id')->is($id)
+                        ->andWhere(function($group){
+                            $group->where('end_time')->is('')
+                                  ->andWhere('start_time')->like($d."%");
+                         })
                         ->set(array(
                                  'end_time' => $date
                                  ));
@@ -64,23 +67,29 @@ class Model
             });   
     }
     
-    public function verifyContor($table)
+    public function verifyContor($id)
     {
-        $this->autoUpdateEndTime($table);
+        $this->autoUpdateEndTime($id);
         $date = date("d-m-Y");
-        return $result1 = $this->dataBase->from($table)
-                                 ->where('end_time')->is('')
-                                 ->andWhere('start_time')->like("%". $date."%")
+        return $result1 = $this->dataBase->from('time_manager_all_users')
+                                 ->where('user_id')->is($id)
+                                    ->andWhere(function($group){
+                                        $group->where('end_time')->is('')
+                                              ->andWhere('start_time')->like(date("d-m-Y")."%");
+                                     })
                                  ->select()
                                  ->all();
     }
 
-    private function autoUpdateEndTime($table)
+    private function autoUpdateEndTime($id)
     {
         $d = date("d-m-Y");
-        $result1 = $this->dataBase->from($table)
-                                 ->where('end_time')->is('')
-                                 ->andWhere('start_time')->notLike($d."%")
+        $result1 = $this->dataBase->from('time_manager_all_users')
+                                    ->where('user_id')->is($id)
+                                    ->andWhere(function($group){
+                                        $group->where('end_time')->is('')
+                                              ->andWhere('start_time')->notLike(date("d-m-Y")."%");
+                                     })
                                  ->select()
                                   ->all();
         if(!empty($result1))
@@ -97,29 +106,36 @@ class Model
                 $hours = '23:59:59';
             }
             $end_time = $day. ' '. $hours;
-            $this->dataBase->update($table)
-                        ->where('end_time')->is('')
-                        ->andWhere('start_time')->notLike($d."%")
+            $this->dataBase->update('time_manager_all_users')
+                        ->where('user_id')->is($id)
+                        ->andWhere(function($group){
+                            $group->where('end_time')->is('')
+                                  ->andWhere('start_time')->notLike($d."%");
+                         })
                         ->set(array(
                                  'end_time' => $end_time
                                  ));
         }
     }
-    public function getWorking($table)
+    public function getWorking($id)
     {
-        return $result = $this->dataBase->from($table)
-                                 ->where('end_time')->isNot('')
-                                 ->andWhere('start_time')->like('%'. date("d-m-Y").'%')
+        return $result = $this->dataBase->from('time_manager_all_users')
+                                ->where('user_id')->is($id)
+                                ->andWhere(function($group){
+                                    $group->where('end_time')->isNot('')
+                                          ->andWhere('start_time')->like('%'. date("d-m-Y").'%');
+                                 })
                                  ->select()
                                  ->all();
     }
 
-    public function getAllWorking($table)
+    public function getAllWorking($id)
     {
-        return $result = $this->dataBase->from($table)
-                                 ->andWhere('start_time')->like('%'. date("-m-Y").'%')
-                                 ->select()
-                                 ->all();   
+        return $result = $this->dataBase->from('time_manager_all_users')
+                                    ->where('user_id')->is($id)
+                                     ->andWhere('start_time')->like('%'. date("-m-Y").'%')
+                                     ->select()
+                                     ->all();   
     }
 
     public function getTaskFromUser($id)
@@ -145,8 +161,11 @@ class Model
                                  ->where('user_id')->is($user_id)
                                  ->select()
                                  ->all();
-
-            return $rez[count($rez)-1];
+            if(isset($rez[count($rez)-1]))
+                $rez = $rez[count($rez)-1];
+            else
+                $rez = array();
+            return $rez;
         }
     }
     public function getStatus($id)

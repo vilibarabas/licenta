@@ -5,9 +5,13 @@
 }
 
 #contor_table td{
-    background-color: #A5A5A5;
+    background-color: #cccccc;
     width:33%;
        
+}
+
+#contor_table .header{
+	background-color:#4d94ff;
 }
 
 #profile_img{

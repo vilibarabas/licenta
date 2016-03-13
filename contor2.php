@@ -6,7 +6,7 @@
 <script src="js/isActivContor.js"></script>
   <?php
     include "controller/controller.php";
-    $controller = new Controller();
+    $controller = new Controller('contor');
   ?>
 <script>
 
@@ -15,9 +15,8 @@
 
 <body onload="startTime()">
       <?php
-    $controller->getMeniu('contor');
-    $table = 'time_manager_'. str_replace('.', '_', $_SESSION['UserData']->username). '_'. $_SESSION['UserData']->user_id;
-    $contor_data = $controller->verifyContor($table);
+    $controller->getMeniu();
+    $contor_data = $controller->verifyContor($_SESSION['UserData']->user_id);
 
     if(!empty($contor_data))
     {
@@ -46,8 +45,8 @@
 
                         <tr>
                             <td>
-                                <center><button id="start_button" type="submit" onclick="clickStart()" class="label label-warning" style="width:100%"><h4>START</h4></button></center>
-                                <center><button id="stop_button" type="submit" onclick="clickstop()" class="label label-warning" style="width:100%;display:none" ><h4>OPRESTE</h4></button></center>
+                                <center><button id="start_button" type="submit" onclick="clickStart()" class="label label-success" style="width:100%"><h4>START</h4></button></center>
+                                <center><button id="stop_button" type="submit" onclick="clickstop()" class="label label-danger" style="width:100%;display:none" ><h4>OPRESTE</h4></button></center>
                             </td>
                             <td>
                                 <br/>
@@ -58,7 +57,7 @@
                             </td> 
                         </tr>
                         <?php 
-                            $controller->getWorkingTimeToday($table);
+                            $controller->getWorkingTimeToday($_SESSION['UserData']->user_id);
                          ?>
                     </table>
                 </div>
@@ -67,7 +66,7 @@
                 <div class="table-responsive">
                     
                         <?php 
-                            $controller->getAllWorkingTime($table);
+                            $controller->getAllWorkingTime($_SESSION['UserData']->user_id);
                          ?>
                 </div>
             </div>
