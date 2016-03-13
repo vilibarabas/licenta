@@ -140,21 +140,39 @@ class Model
 
     public function getTaskFromUser($id)
     {
-        return $this->dataBase->from('users_task_manager')
+        if($id !== -1)
+        {
+            return $this->dataBase->from('users_task_manager')
                                  ->where('user_id')->is($id)
                                  ->select()
                                  ->all();   
+        }
+        else
+        {
+            return $this->dataBase->from('users_task_manager')
+                                 ->where('user_id')->isNull()
+                                 ->select()
+                                 ->all();
+        }
     }
-    public function getTask($id, $user_id)
+    public function getTask($id, $user_id, $task_id = null)
     {
-        if($id != -1)
+        if($id != -1 && $task_id == null)
         {
             $rez = $this->dataBase->from('users_task_manager')
                                  ->where('id')->is($id)
                                  ->select()
                                  ->all();
             return $rez[0];
-        }   
+        }
+        elseif($task_id != null)
+        {
+           $rez = $this->dataBase->from('users_task_manager')
+                                 ->where('id')->is($task_id)
+                                 ->select()
+                                 ->all();
+            return $rez[0]; 
+        }  
         else
         {
             $rez = $this->dataBase->from('users_task_manager')
@@ -184,16 +202,25 @@ class Model
                                  ->all();        
     }
 
-    public function saveTaskChange($status, $id, $percent, $description, $observation)
+    public function saveTaskChange($user, $status, $id, $percent, $description, $observation)
     {
         $this->dataBase->update('users_task_manager')
                     ->where('id')->is($id)
                     ->set(array(
+                             'user_id' => $user,
                              'status' => $status,
                              'percent' => $percent,
                              'description' => $description,
                              'observation' => $observation
                              ));
+    }
+    public function getallUsersFromTeam($team, $id)
+    {
+        return $this->dataBase->from('all_users')
+                                 ->where('department')->like($team)
+                                 ->andWhere('user_id')->isNot($id)
+                                 ->select()
+                                 ->all();
     }
 }
 //

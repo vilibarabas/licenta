@@ -60,13 +60,13 @@
 									    	<select id="select_task">
 										    	<option>select...</option>
 							            		<?php
-							            			$controller->getSelectTask($_SESSION['UserData']->user_id);
+							            			$controller->getAllTaskToWork($_SESSION['UserData']->user_id);
 
 							            		?>
 						            		</select>
 										</td>
 										<td>
-											<button id="view_task" type="submit" onclick="clickView()" class="btn btn-info">View</button>
+											<button id="view_task" type="button" class="btn btn-info">View</button>
 										</td>
 
 									</tr>
@@ -100,7 +100,7 @@
 												</td>
 												<td>', 
 													 $task->task_name,'<input hidden = "hidden" id="precent" value="',  $task->percent, '">';
-											echo '<input hidden = "hidden" id="task_id" value="'. $task->id.'">
+											echo '<input hidden = "hidden" id="task_id" value="'. $task->id.'"><input hidden = "hidden" id="user" value="'. $task->user_id.'">
 												</td>
 												<td></td>
 										</tr>
@@ -192,19 +192,29 @@
 											<p>Select project</p>
 										</th>
 									    <td scope="row">
-									    	<select id="select_task">
+									    	<select id="select_task_for_asign">
 										    	<option>select...</option>
 							            		<?php
-							            			$controller->getSelectTask($_SESSION['UserData']->user_id);
-							            		?>
+							            			$controller->getAllTaskToWork(-1);
+							            		?>	
 						            		</select>
 										</td>
-										<td>
-											<button id="view_task" type="submit" onclick="clickView()" class="btn btn-info">View</button>
+										<td id="asignProject">
+											<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="asignProject">Open Modal</button>
 										</td>
-
 									</tr>
 								</table>
+								<!-- Modal content-->
+								<div id="load_container">
+									
+								</div>
+								<?php
+									
+									
+										//include('view/project_asign.php');
+									
+				      				
+				      			?>
 							</div>
 						</div>
 					</div>

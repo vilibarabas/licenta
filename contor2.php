@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <head>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script src="js/contor.js"></script>
-<script src="js/ajax.js"></script>
-<script src="js/isActivContor.js"></script>
+
+
   <?php
     include "controller/controller.php";
     $controller = new Controller('contor');

@@ -20,11 +20,11 @@ $(document).ready(function (){
             s1 = document.getElementById("last_sec").value;
             document.getElementById("start_button").style.display = "none";
             document.getElementById("stop_button").style.display  = "block";
-            var data = getElementById('#last_time');
+            var data = document.getElementById('#last_time');
             var h = today.getHours();
             var m = today.getMinutes();
             var s = today.getSeconds();
-            alert(h);
+            
             h = h - h1;
             m = checkTime(m) - checkTime(m1);
             

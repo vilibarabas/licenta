@@ -11,4 +11,4 @@ $conectInfo = array(
 
 $m = new model($conectInfo);
 
-$m->saveTaskChange($_POST['status'], $_POST['task_id'], $_POST['percent'], $_POST['descriotion'], $_POST['observation']);
+$m->saveTaskChange($_POST['user'], $_POST['status'], $_POST['task_id'], $_POST['percent'], $_POST['descriotion'], $_POST['observation']);

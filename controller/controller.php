@@ -1,6 +1,6 @@
 <?php
 
-include "model/model.php";
+@include "model/model.php";
 
 class Controller
 {
@@ -22,12 +22,13 @@ class Controller
                );
         $this->headElements = array(
                           'profil' => array(
-                                            '<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>',
-                                            '<script type="text/javascript" src="canvasjs/canvasjs.min.js"></script>',
-                                            '<script src="js/precent.js"></script>',
+                                            
+                                            '<script src="js/ajax.js"></script>',
                                             ),
                           'contor' => array(
-                                            '',
+                                            '<script src="js/contor.js"></script>',
+                                            '<script src="js/isActivContor.js"></script>',
+                                            '<script src="js/ajax.js"></script>',
                                             ),
                         );
        $this->model = new Model($this->conectInfo); 
@@ -37,8 +38,7 @@ class Controller
             <title>Licenta</title>
             <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
             <link rel="stylesheet" type="text/css" href="style/style.css">
-            <script src="js/ajax.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         ';
        $this->addHead($page);
@@ -224,7 +224,7 @@ class Controller
         }
     }
 
-    public function getSelectTask($id)
+    public function getAllTaskToWork($id)
     {
         
         $this->model = new Model($this->conectInfo);
@@ -234,7 +234,8 @@ class Controller
             {
                 echo '<option value="'. $sel->id. '">'. $sel->task_name. '</option>';
             }
-    }       
+    } 
+
     public function getSelectStatus($status_activ)
     {
         $select = $this->model->getallStatus();
@@ -244,6 +245,17 @@ class Controller
                 echo '<option value="', $sel->status_id, '" ', $status_activ == $sel->status_id ? 'selected' : '','>', $sel->status_name, '</option>';
             }
     }
+
+    public function getSelectUsers($team, $id)
+    {
+        $select = $this->model->getallUsersFromTeam($team, $id);
+        if(!empty($select))
+            foreach($select as $sel)
+            {
+                echo '<option value="', $sel->user_id, '">', $sel->name, '</option>';
+            }
+    }
+
     private function addZero(&$v)
     {
         if($v > 0 && $v < 10)
