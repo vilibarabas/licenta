@@ -110,7 +110,7 @@ class Model
                         ->where('user_id')->is($id)
                         ->andWhere(function($group){
                             $group->where('end_time')->is('')
-                                  ->andWhere('start_time')->notLike($d."%");
+                                  ->andWhere('start_time')->notLike(date("d-m-Y")."%");
                          })
                         ->set(array(
                                  'end_time' => $end_time
@@ -138,32 +138,60 @@ class Model
                                      ->all();   
     }
 
-    public function getTaskFromUser($id)
+    public function getTaskFromUser($id, $team = null)
     {
-        if($id !== -1)
+        if($id == -1)
         {
-            return $this->dataBase->from('users_task_manager')
-                                 ->where('user_id')->is($id)
-                                 ->select()
-                                 ->all();   
+           return $this->dataBase->from('users_task_manager')
+                             ->where('user_id')->isNull()
+                             ->select()
+                             ->all();
+        }
+        if($id == -2)
+        {
+            $result = $this->dataBase->from('users_task_manager')
+                         ->join(['all_users' => 'u'], function($join){
+                            $join->on('u.user_id', 'users_task_manager.user_id');
+                         })
+                         ->where('u.department')->is($team)
+                         ->select()
+                         ->all();
+            return $result;
         }
         else
         {
             return $this->dataBase->from('users_task_manager')
-                                 ->where('user_id')->isNull()
+                                 ->where('user_id')->is($id)
                                  ->select()
                                  ->all();
         }
     }
     public function getTask($id, $user_id, $task_id = null)
     {
+        if($id == -2)
+        {
+            echo 'FAX3';
+            $rez = $this->dataBase->from('users_task_manager')
+                                 ->where('user_id')->is($user_id)
+                                 ->andWhere('priority')->is(1)
+                                 ->select()
+                                 ->all();
+            if(!empty($rez))
+                return $rez[0];
+            else
+                return array();
+        }
+
         if($id != -1 && $task_id == null)
         {
             $rez = $this->dataBase->from('users_task_manager')
                                  ->where('id')->is($id)
                                  ->select()
                                  ->all();
-            return $rez[0];
+            if(isset($rez[0]))
+                return $rez[0];
+            else
+                return array();
         }
         elseif($task_id != null)
         {
@@ -174,7 +202,7 @@ class Model
             return $rez[0]; 
         }  
         else
-        {
+        { 
             $rez = $this->dataBase->from('users_task_manager')
                                  ->where('user_id')->is($user_id)
                                  ->select()
@@ -202,8 +230,25 @@ class Model
                                  ->all();        
     }
 
-    public function saveTaskChange($user, $status, $id, $percent, $description, $observation)
+    public function saveTaskChange($user, $status, $id, $percent, $description, $observation, $priority)
     {
+        if($priority == 'true')
+        {
+            $this->dataBase->update('users_task_manager')
+                    ->where('id')->is($id)
+                    ->set(array(
+                             'priority' => 1
+                             ));
+        }
+        else
+        {
+            $this->dataBase->update('users_task_manager')
+                    ->where('id')->is($id)
+                    ->set(array(
+                             'priority' => null
+                             ));
+        }
+
         $this->dataBase->update('users_task_manager')
                     ->where('id')->is($id)
                     ->set(array(
@@ -211,7 +256,7 @@ class Model
                              'status' => $status,
                              'percent' => $percent,
                              'description' => $description,
-                             'observation' => $observation
+                             'observation' => $observation,
                              ));
     }
     public function getallUsersFromTeam($team, $id)
@@ -223,14 +268,13 @@ class Model
                                  ->all();
     }
 }
-//
-//$conectInfo = array(
+
+// $conectInfo = array(
 //           'host' => 'localhost',
 //           'database' => 'firma_database',
 //           'username' => 'root',
 //           'password' => '',
 //           );
-//
-//$m = new Model($conectInfo);
-//
-//print_r($m->getData('all_users'));
+
+// $m = new Model($conectInfo);
+// $m->getTask(-1, 1);

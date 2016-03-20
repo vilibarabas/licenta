@@ -95,14 +95,26 @@ echo '
 					<div class="col-md-4">
 						<select id="asign_select_user">
 					    	<option>select...</option>
-		            		', $controller->getSelectUsers($_SESSION['UserData']->department, $_SESSION['UserData']->user_id), '
+		            		', $controller->getSelectUsers($_SESSION['UserData']->department, $_SESSION['UserData']->user_id, $task_asign->user_id), '
 	            		</select>
 	            	</div>
-	            	<div class="col-md-5">
-						<button id="asign_project" type="button" class="btn btn-success" data-dismiss="modal">Asign</button>
+	            	
+	            </div>
+	            <div class="row">
+		 			<div class="col-md-3">
+						<span>Priority</span>
+					</div>
+					<div class="col-md-4">
+						<input name="priority" id="priority" type="checkbox"\>
 					</div>
 	            </div>
-
+	            <div class="row">
+		 			<div class="col-md-3">
+					</div>
+	            	<div class="col-md-5">
+						<button id="asign_project" type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+					</div>
+	            </div>
 			</div>
 	  </div>
 </div>';

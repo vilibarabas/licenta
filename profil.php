@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
-	 <?php
-	    include "controller/controller.php";
-	    $controller = new Controller('profil');
-	  ?>
+	<head>
+	<title>Licenta</title>
+	<?php
+			include "controller/controller.php";
+		    $controller = new Controller('profil');
+	?>
+        
+	</head>
+
 	<body>
 		<?php
 	    	$controller->getMeniu('profil');
 	    ?>
-
+	    
 	    <div class="container">
 	    	<div class="row">
 	    		
@@ -21,6 +26,7 @@
 						  	if($_SESSION['UserData']->acces_index == 2)
 						  	{
 						  		echo '<li><a href="#tab_c" data-toggle="tab">Assign Project</a></li>';
+						  		echo '<li><a href="#tab_d" data-toggle="tab">Set Priority</a></li>';
 						  	}
 						  ?>
 				        </ul>
@@ -28,194 +34,99 @@
 			    </div>
 			    <div class="col-md-8">
 			        <div class="tab-content">
-			            <div class="tab-pane active" id="tab_a">
+			            <div class="tab-pane" id="tab_a">
 			            	<div class="table-responsive">
-			            		<table class="table table-striped">
-								    <tr>
-								      <th scope="row"><img id="profile_img" src="img/profile_img.jpg"></th>
-								    </tr>
-								    <tr>
-								      <th scope="row">Name: </th>
-								      <td><?php echo $_SESSION['UserData']->name; ?></td>
-								    </tr>
-								    <tr>
-								      <th scope="row">Departament: </th>
-								      <td><?php echo $_SESSION['UserData']->department; ?></td>
-								    </tr>
-								    <tr>
-								      <th scope="row">Functie: </th>
-								       <td><?php echo $_SESSION['UserData']->functie; ?></td> 
-								    </tr>
-								</table>
+			            		<?php
+			            			include('view/user_profile.php');
+			            			$task = $controller->model->getTask(-2, $_SESSION['UserData']->user_id);
+			            		?>
 			            	</div>	
 			            </div>
-			            <div class="tab-pane" id="tab_b">
-			            	<div class="table-responsive">
-				            	<table class="table table-striped">
-									<tr>
-										<th>
-											<p>Select Task</p>
-										</th>
-									    <td scope="row">
-									    	<select id="select_task">
-										    	<option>select...</option>
-							            		<?php
-							            			$controller->getAllTaskToWork($_SESSION['UserData']->user_id);
+			            <?php //echo '<div class="tab-pane',  isset($_SESSION["select_task"]) ? 'actice' : '', '" id="tab_b">';?>
+				        <div class="tab-pane active" id="tab_b">
+				            <form action="profil.php" method="POST">
+				            	<div class="table-responsive">
+					            	<table class="table table-striped">
+										<tr>
+											<th>
+												<p>Select Task</p>
+											</th>
+										    <td scope="row">
+										    	<?php echo '<select id="select_task" name="select_task" ', $task->priority ? 'disabled': '','>'; ?>
+											    	<option>select...</option>
+								            		<?php
+								            			$controller->getAllTaskToWork($_SESSION['UserData']->user_id);
 
-							            		?>
-						            		</select>
-										</td>
-										<td>
-											<button id="view_task" type="button" class="btn btn-info">View</button>
-										</td>
+								            		?>
+							            		</select>
+											</td>
+											<td>
+												<input  id="view_task" type="submit" class="btn btn-info" value="Select Project"/>
+											</td>
 
-									</tr>
-									
-									<?php
-										if(isset($_POST['task_id']))
-										{
-											$id = $_POST['task_id'];
-										}
-										else
-										{
-											$id = -1;
-										}
+										</tr>
+										
+										<?php
+											if(isset($_POST['select_task']))
+											{
+												$id = $_POST['select_task'];
+												$_SESSION['task_id'] = $id;
+											}
+											elseif(isset($_SESSION['task_id']))
+											{
+												$id = $_SESSION['select_task'];
+											}
+											
+											if(isset($id))	
+												if(strpos($id, '...') !== FALSE)
+												{
+													if(isset($_POST['task_id']))
+													{
+														$id = $_POST['task_id'];
+														$_SESSION['task_id'] = $id;
+													}
+												}
 
-										$task = $controller->model->getTask($id, $_SESSION['UserData']->user_id);
-										//print_r($task);
-									?>
-									<tr>
-										<td>
-											<h1>Task Information</h1>
-										</td>
-									</tr>
-
-									<?php
-
-										if(!empty($task))
+											if(!isset($id) || $id == '')
+											 $id = -1;
+											
+											if(empty($task))
+												$task = $controller->model->getTask($id, $_SESSION['UserData']->user_id);
+											
+										if(isset($task->priority))
 										{
 											echo '<tr>
-												<td>
-													Titlu Task:
-												</td>
-												<td>', 
-													 $task->task_name,'<input hidden = "hidden" id="precent" value="',  $task->percent, '">';
-											echo '<input hidden = "hidden" id="task_id" value="'. $task->id.'"><input hidden = "hidden" id="user" value="'. $task->user_id.'">
-												</td>
-												<td></td>
-										</tr>
-										<tr>
-											<td>
-												Stadiu: 
-											</td>
-											<td>',  $controller->model->getStatus($task->status), '
-											</td>
-											<td>
-												<select id="select_status">
-											    	<option>select...</option>
-								            		', $controller->getSelectStatus($task->status), '
-							            		</select>		
-											</td>
-										</tr>
-										<tr>
-											<td>
-												Stadiu de procesare: 
-											</td>
-											<td>
-												<div class="progress"> <div class="progress-bar progress-bar-striped active" role="progressbar"
-												  aria-valuenow="', $task->percent,'" aria-valuemin="0" aria-valuemax="100" style="width:40%">',  $task->percent, '%
-												  	</div>
-												</div>
-											</td>
-											<td>
-												<select id="select_percent">';
-														for($i = 0; $i <= 100; $i+=10)
-														{
+														<td>
+															<div class="alert alert-danger">This is the priority Task</div>
+														</td>
+													</tr>';
+										}
 
-															echo 
-																'<option value="', $i,'" ', ($task->percent == $i)? 'selected' : '','>',
-																	$i, ' %'
-																,'</option>';
-														}
-												echo 	'
-												</select>
-											</td>
-										</tr>
+										?>
+
 										<tr>
 											<td>
-												Description:
-											</td>
-											<td>
-												<textarea rows="4" cols="50" id="description">'. $task->description.'</textarea>
-											</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>
-												Observation:
-											</td>
-											<td>
-												 <textarea rows="4" cols="50"  id="observation">'. $task->observation.'</textarea>
-											</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>
-												<button id="set_status" type="submit" class="btn btn-success">Save</button>
+												<h4>Task Information</h1>
 											</td>
 										</tr>
-										<br>
-										<tr>
-											<!-- <div>
-												<div id="chartContainer" style="height: 300px; width: 100%;"></div>
-											</div> -->
-										</tr>';
-									}
-									else
-									{
-										echo '<tr>
-											<div>
-												<h3>Nu exista nici untask rezolvat</h3>
-											</div>
-										</tr>';
-									}
-									?>
-								</table>
-			            	</div>
-			            </div>
+
+										<?php
+											include('view/print_task.php');									
+										?>
+									</table>
+				            	</div>
+				        	</form>
+				        </div>
 			        
 				        <div class="tab-pane" id="tab_c">
-			            	<div class="table-responsive">
-				            	<table class="table table-striped">
-									<tr>
-										<th>
-											<p>Select project</p>
-										</th>
-									    <td scope="row">
-									    	<select id="select_task_for_asign">
-										    	<option>select...</option>
-							            		<?php
-							            			$controller->getAllTaskToWork(-1);
-							            		?>	
-						            		</select>
-										</td>
-										<td id="asignProject">
-											<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="asignProject">Open Modal</button>
-										</td>
-									</tr>
-								</table>
-								<!-- Modal content-->
-								<div id="load_container">
-									
-								</div>
-								<?php
-									
-									
-										//include('view/project_asign.php');
-									
-				      				
-				      			?>
-							</div>
+			            	<?php
+			            		include('view/profile_asign_project.php');
+			            	?>
+						</div>
+						<div class="tab-pane" id="tab_d">
+			            	<?php
+			            		include('view/set_priority_project.php');
+			            	?>
 						</div>
 					</div>
 			    </div>

@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <head>
 
-
+<title>Licenta</title>
+           
   <?php
     include "controller/controller.php";
     $controller = new Controller('contor');
   ?>
-<script>
-
-</script>
 </head>
 
 <body onload="startTime()">
       <?php
     $controller->getMeniu();
     $contor_data = $controller->verifyContor($_SESSION['UserData']->user_id);
-
     if(!empty($contor_data))
     {
         echo "<input id='last_date' hidden='hidden' value='". explode(' ', $contor_data[0]->start_time)[0]."' />";
@@ -26,7 +23,7 @@
     }
     else
     {
-        echo "<input id='last_time' hidden='hidden' value='' />";
+        echo "<input id='last_date' hidden='hidden' value='' />";
     }
 
     ?>

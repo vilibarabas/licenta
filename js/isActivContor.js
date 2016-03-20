@@ -3,7 +3,7 @@ var h1 ;
 var s1 ;
 
 $(document).ready(function (){
-    if(document.getElementById('#last_time') !== ''){
+    if(document.getElementById('last_date') !== ''){
         
         var last_date = document.getElementById("last_date").value;
         last_date = last_date.split("-");
@@ -20,7 +20,7 @@ $(document).ready(function (){
             s1 = document.getElementById("last_sec").value;
             document.getElementById("start_button").style.display = "none";
             document.getElementById("stop_button").style.display  = "block";
-            var data = document.getElementById('#last_time');
+            var data = document.getElementById('#last_date');
             var h = today.getHours();
             var m = today.getMinutes();
             var s = today.getSeconds();

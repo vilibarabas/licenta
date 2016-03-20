@@ -23,30 +23,30 @@ class Controller
         $this->headElements = array(
                           'profil' => array(
                                             
-                                            '<script src="js/ajax.js"></script>',
                                             ),
                           'contor' => array(
-                                            '<script src="js/contor.js"></script>',
                                             '<script src="js/isActivContor.js"></script>',
-                                            '<script src="js/ajax.js"></script>',
+                                            '<script src="js/contor.js"></script>',
                                             ),
                         );
-       $this->model = new Model($this->conectInfo); 
-      session_start();
+        $this->model = new Model($this->conectInfo); 
+        session_start();
+        $this->addHead($page);
 
-      echo '<head>
-            <title>Licenta</title>
-            <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-            <link rel="stylesheet" type="text/css" href="style/style.css">
-            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-            <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        ';
-       $this->addHead($page);
-      echo '</head>', PHP_EOL;
+        if(isset($_POST['save_project_update']))
+        {
+            $this->model->saveTaskChange($_POST['user'], $_POST['select_status'], $_POST['task_id'], $_POST['select_percent'], $_POST['description'], $_POST['observation']);
+            unset($_POST['save_project_update']);
+        }
     }
     
     private function addHead($page)
     {
+        echo '<link rel="stylesheet" type="text/css" href="style/style.css">
+            <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">    
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+            <script src="js/ajax.js"></script>';
         if(isset($this->headElements[$page]))
             foreach($this->headElements[$page] as $val)
             {
@@ -224,11 +224,11 @@ class Controller
         }
     }
 
-    public function getAllTaskToWork($id)
+    public function getAllTaskToWork($id, $team)
     {
         
         $this->model = new Model($this->conectInfo);
-        $select = $this->model->getTaskFromUser($id);
+        $select = $this->model->getTaskFromUser($id, $team);
         if(!empty($select))
             foreach($select as $sel)
             {
@@ -246,13 +246,13 @@ class Controller
             }
     }
 
-    public function getSelectUsers($team, $id)
+    public function getSelectUsers($team, $id, $user_id)
     {
         $select = $this->model->getallUsersFromTeam($team, $id);
         if(!empty($select))
             foreach($select as $sel)
             {
-                echo '<option value="', $sel->user_id, '">', $sel->name, '</option>';
+                echo '<option value="', $sel->user_id, '" ', $user_id == $sel->user_id ? 'selected' : '', '>', $sel->name, '</option>';
             }
     }
 

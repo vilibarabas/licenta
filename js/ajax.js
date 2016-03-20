@@ -1,6 +1,5 @@
 $(document).ready(function (){
 	$('#start_button').click( function()	{
-		
 		$.ajax({
 			url:"ajax/get_contor_data.php",
 			type:"POST",
@@ -24,7 +23,8 @@ $(document).ready(function (){
 		});
 	});
 
-	$('#set_status').click( function()	{
+	$('#save_project_update').click( function()	{
+
 		$.ajax({
 			url:"ajax/save_task_data.php",
 			type:"POST",
@@ -42,12 +42,21 @@ $(document).ready(function (){
 			}
 		});
 	});
-
+	$('#select_task_for_edit').change( function()	{
+		$.ajax({
+			url:"ajax/asign_project.php",
+			type:"POST",
+			data: {taskId:$('#select_task_for_edit').val()},
+			success: function(result){
+				$('#load_container_2').html(result);
+			}
+		});
+	});
 	$('#asign_project').click( function()	{
 		$.ajax({
 			url:"ajax/save_task_data.php",
 			type:"POST",
-			data: {user:$('#asign_select_user').val(),status:$('#asign_select_status').val(), task_id:$('#asign_task_id').val(), percent:$('#asign_select_percent').val(), descriotion:$('#asign_description').val(), observation:$('#asign_observation').val()}
+			data: {user:$('#asign_select_user').val(),status:$('#asign_select_status').val(), task_id:$('#asign_task_id').val(), percent:$('#asign_select_percent').val(), descriotion:$('#asign_description').val(), observation:$('#asign_observation').val(), priority:$('#priority').prop('checked')}
 		});
 	});
 });
