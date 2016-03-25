@@ -2,13 +2,13 @@
 	<table class="table table-striped">
 		<tr>
 			<th>
-				<p>Select project</p>
+				<p>Select project for assign</p>
 			</th>
 		    <td scope="row">
 		    	<select id="select_task_for_asign">
 			    	<option>select...</option>
             		<?php
-            			$controller->getAllTaskToWork(-1);
+            			$controller->getAllTaskToWork(-1, $_SESSION['UserData']->department);
             		?>	
         		</select>
 			</td>

@@ -12,7 +12,11 @@
           
            echo "<li ",   $this->active == 'profil' ? 'class="active"' : '', '><a href="profil.php?id=',  $_SESSION['UserData']->user_id,'">Profil</a></li>';?>
           <li <?php echo $this->active == 'contor' ? 'class="active"' : ''; ?>><a href="contor2.php">Contor</a></li>
-          <li class=\"navbar-right\"></li>
+          <?php
+            if($_SESSION['UserData']->acces_index == 1)
+             echo '<li ', $this->active == 'administrator' ? 'class="active"' : '', '><a href="administrator.php">Administrator</a></li>';
+          ?>
+          <li class="navbar-right"></li>
         </ul>
         <?php  
               $this->logOut();

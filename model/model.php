@@ -158,6 +158,12 @@ class Model
                          ->all();
             return $result;
         }
+        if($id == -3)
+        {
+            return $this->dataBase->from('users_task_manager')
+                                 ->select()
+                                 ->all();
+        }
         else
         {
             return $this->dataBase->from('users_task_manager')
@@ -168,12 +174,12 @@ class Model
     }
     public function getTask($id, $user_id, $task_id = null)
     {
-        if($id == -2)
+        if($id == -2) // cererea unui proiect cu prioritate
         {
-            echo 'FAX3';
             $rez = $this->dataBase->from('users_task_manager')
                                  ->where('user_id')->is($user_id)
                                  ->andWhere('priority')->is(1)
+                                 ->andWhere('percent')->isNot(100)
                                  ->select()
                                  ->all();
             if(!empty($rez))
@@ -182,7 +188,7 @@ class Model
                 return array();
         }
 
-        if($id != -1 && $task_id == null)
+        if($id != -1 && $task_id == null) // cererea unui proiect al utilizatorilui cu id- ul respectiv
         {
             $rez = $this->dataBase->from('users_task_manager')
                                  ->where('id')->is($id)
@@ -193,7 +199,7 @@ class Model
             else
                 return array();
         }
-        elseif($task_id != null)
+        elseif($task_id != null) //cererea a unui proiect cu id ul respectiv
         {
            $rez = $this->dataBase->from('users_task_manager')
                                  ->where('id')->is($task_id)
@@ -201,10 +207,11 @@ class Model
                                  ->all();
             return $rez[0]; 
         }  
-        else
+        else // cererea ultimului project care este inceput 
         { 
             $rez = $this->dataBase->from('users_task_manager')
                                  ->where('user_id')->is($user_id)
+                                 ->andWhere('percent')->isNot(100)
                                  ->select()
                                  ->all();
             if(isset($rez[count($rez)-1]))
@@ -230,9 +237,9 @@ class Model
                                  ->all();        
     }
 
-    public function saveTaskChange($user, $status, $id, $percent, $description, $observation, $priority)
+    public function saveTaskChange($user, $status, $id, $percent, $description, $observation, $priority = null)
     {
-        if($priority == 'true')
+        if($priority == 'true') //setarea unui project ca si cel mai important 
         {
             $this->dataBase->update('users_task_manager')
                     ->where('id')->is($id)
@@ -240,7 +247,7 @@ class Model
                              'priority' => 1
                              ));
         }
-        else
+        elseif(($priority == 'false')) // terminarea sesiunii de prioritate
         {
             $this->dataBase->update('users_task_manager')
                     ->where('id')->is($id)
@@ -249,7 +256,7 @@ class Model
                              ));
         }
 
-        $this->dataBase->update('users_task_manager')
+        $this->dataBase->update('users_task_manager') // modificarea datelui unui proiect
                     ->where('id')->is($id)
                     ->set(array(
                              'user_id' => $user,
@@ -263,9 +270,161 @@ class Model
     {
         return $this->dataBase->from('all_users')
                                  ->where('department')->like($team)
-                                 ->andWhere('user_id')->isNot($id)
+                                 //->andWhere('user_id')->isNot($id)
                                  ->select()
                                  ->all();
+    }
+
+    public function createProject($name, $description, $observation, $time)
+    {
+        $this->dataBase->insert(array(
+                             'status' => '0',
+                             'percent' => '0',
+                             'task_name' => $name,
+                             'description' => $description,
+                             'observation' => $observation,
+                             'time' => $time,
+                        ))
+                        ->into('users_task_manager');
+    }
+
+    public function deleteProject($id, $delete)
+    {
+
+        if($delete)
+        {
+            $this->deleteFinalyProject($id);
+            return 0;
+        }
+
+        $rez = $this->dataBase->from('users_task_manager')
+                        ->where('id')->is($id)
+                        ->select()
+                        ->all();
+
+        if($this->askForDelete($rez[0]))
+        {
+            return 1;
+        }
+
+        $this->deleteFinalyProject($id);
+
+        return 0;
+    }
+
+    public function deleteFinalyProject($id)
+    {
+        $this->dataBase->from('users_task_manager')
+             ->where('id')->is($id)
+             ->delete();
+    }
+
+    public function askForDelete($task)
+    {
+        if($task->status != 0 || $task->percent != 0)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    //---------------------------------Admin part
+
+    public function getAllUsers($department, $functie, $acces_index)
+    {
+        
+        if($department)
+        {
+            if($functie)
+            {
+                if($acces_index)
+                {
+                    return $this->dataBase->from('all_users')
+                                      ->where('acces_index')->is($acces_index)
+                                      ->andWhere('department')->is($department)
+                                      ->andWhere('functie')->is($functie)
+                                      ->select()
+                                      ->all();    
+                }
+
+                return $this->dataBase->from('all_users')
+                                  ->where('department')->is($department)
+                                  ->andWhere('functie')->is($functie)
+                                  ->select()
+                                  ->all();    
+            }
+            elseif($acces_index)
+            {
+                return $this->dataBase->from('all_users')
+                                  ->where('acces_index')->is($acces_index)
+                                  ->andWhere('department')->is($department)
+                                  ->select()
+                                  ->all();
+            }
+
+            return $this->dataBase->from('all_users')
+                              ->where('department')->is($department)
+                              ->select()
+                              ->all();    
+        }
+
+        if($functie)
+        {
+            if($acces_index)
+            {
+                return $this->dataBase->from('all_users')
+                                  ->where('acces_index')->is($acces_index)
+                                  ->andWhere('functie')->is($functie)
+                                  ->select()
+                                  ->all();    
+            }
+
+            return $this->dataBase->from('all_users')
+                              ->where('functie')->is($functie)
+                              ->select()
+                              ->all();    
+        }
+
+        if($acces_index)
+        {
+            return $this->dataBase->from('all_users')
+                              ->where('acces_index')->is($acces_index)
+                              ->select()
+                              ->all();    
+        }
+
+        return $this->dataBase->from('all_users')
+                              ->select()
+                              ->all();
+    } 
+
+    public function getDistinctSelector()
+    {
+        $rez['department'] = $this->getUnique($this->getRecords('department'), 'department');
+        $rez['acces_index'] = $this->getUnique($this->getRecords('acces_index'), 'acces_index');
+        $rez['functie'] = $this->getUnique($this->getRecords('functie'), 'functie');
+        
+        return $rez;
+    }
+
+    private function getRecords($key)
+    {
+        return $this->dataBase->from('all_users')
+                              ->select($key)
+                              ->all();
+    }
+
+    private function getUnique($records, $key)
+    {
+
+        foreach($records as $r)
+        {
+            $r = (array) $r;
+            $rez[$r[$key]] = 1;
+        }
+
+        return $rez;
     }
 }
 

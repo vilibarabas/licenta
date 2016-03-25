@@ -28,6 +28,9 @@ class Controller
                                             '<script src="js/isActivContor.js"></script>',
                                             '<script src="js/contor.js"></script>',
                                             ),
+                          'administrator' => array(
+                                            '<script src="js/admin.js"></script>'
+                                            ),
                         );
         $this->model = new Model($this->conectInfo); 
         session_start();
@@ -246,7 +249,7 @@ class Controller
             }
     }
 
-    public function getSelectUsers($team, $id, $user_id)
+    public function getSelectUsers($team, $id, $user_id = -1)
     {
         $select = $this->model->getallUsersFromTeam($team, $id);
         if(!empty($select))
@@ -262,5 +265,13 @@ class Controller
         {
             $v = '0'. $v;
         }
+    }
+
+    public function getPostValue($key)
+    {
+        if(isset($_POST[$key]))
+            if($_POST[$key] != 'All')
+                return $_POST[$key];
+        return false;
     }
 }

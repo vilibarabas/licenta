@@ -26,7 +26,9 @@
 						  	if($_SESSION['UserData']->acces_index == 2)
 						  	{
 						  		echo '<li><a href="#tab_c" data-toggle="tab">Assign Project</a></li>';
-						  		echo '<li><a href="#tab_d" data-toggle="tab">Set Priority</a></li>';
+						  		echo '<li><a href="#tab_d" data-toggle="tab">Edit Project</a></li>';
+						  		echo '<li><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalCreate" id="asignProject11">Create Project</button></li>';
+						  		 
 						  	}
 						  ?>
 				        </ul>
@@ -44,6 +46,9 @@
 			            </div>
 			            <?php //echo '<div class="tab-pane',  isset($_SESSION["select_task"]) ? 'actice' : '', '" id="tab_b">';?>
 				        <div class="tab-pane active" id="tab_b">
+				        	<div id="create_project_container">
+				        		
+				        	</div>
 				            <form action="profil.php" method="POST">
 				            	<div class="table-responsive">
 					            	<table class="table table-striped">
@@ -52,10 +57,10 @@
 												<p>Select Task</p>
 											</th>
 										    <td scope="row">
-										    	<?php echo '<select id="select_task" name="select_task" ', $task->priority ? 'disabled': '','>'; ?>
+										    	<?php echo '<select id="select_task" name="select_task" ', (!empty($task) && $task->priority) ? 'disabled': '','>'; ?>
 											    	<option>select...</option>
 								            		<?php
-								            			$controller->getAllTaskToWork($_SESSION['UserData']->user_id);
+								            			$controller->getAllTaskToWork($_SESSION['UserData']->user_id, $_SESSION['UserData']->department);
 
 								            		?>
 							            		</select>
@@ -74,7 +79,7 @@
 											}
 											elseif(isset($_SESSION['task_id']))
 											{
-												$id = $_SESSION['select_task'];
+												$id = $_SESSION['task_id'];
 											}
 											
 											if(isset($id))	
@@ -106,7 +111,7 @@
 
 										<tr>
 											<td>
-												<h4>Task Information</h1>
+												<h4>Task Information</h4>
 											</td>
 										</tr>
 
@@ -117,17 +122,25 @@
 				            	</div>
 				        	</form>
 				        </div>
-			        
-				        <div class="tab-pane" id="tab_c">
-			            	<?php
-			            		include('view/profile_asign_project.php');
-			            	?>
-						</div>
-						<div class="tab-pane" id="tab_d">
-			            	<?php
-			            		include('view/set_priority_project.php');
-			            	?>
-						</div>
+			        	<?php
+						  	if($_SESSION['UserData']->acces_index == 2)
+						  	{
+						        echo '<div class="tab-pane" id="tab_c">';
+					            	
+					            include('view/profile_asign_project.php');	
+								echo '</div>
+								<div class="tab-pane" id="tab_d">';
+					            	
+					            include('view/set_priority_project.php');
+					            
+					            echo '</div>
+									<div class="create_project">';
+					            
+					            include('view/create_new_project.php');
+					            
+					            echo '</div>';
+							}
+						?>
 					</div>
 			    </div>
 		    </div>
