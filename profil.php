@@ -20,9 +20,12 @@
 	 			<div class="col-md-2">
 	 				<div class="row">	
 				        <ul class="nav">
-				          <li class="active"><a href="#tab_a" data-toggle="tab">Profil</a></li>
-						  <li><a href="#tab_b" data-toggle="tab">Work manager</a></li>
-						  <?php
+				          <?php 
+				          	
+					          	echo '<li ',  isset($_GET["profil"]) ? ' class="active"' : '', '><a href="#tab_a" data-toggle="tab" href="">Profil</a></li>'; 
+					        
+						  		echo '<li ',  isset($_GET["profil"]) ? '' : ' class="active"', '><a href="#tab_b" data-toggle="tab"> Work manager</a></li>';
+						  
 						  	if($_SESSION['UserData']->acces_index == 2)
 						  	{
 						  		echo '<li><a href="#tab_c" data-toggle="tab">Assign Project</a></li>';
@@ -36,20 +39,24 @@
 			    </div>
 			    <div class="col-md-8">
 			        <div class="tab-content">
-			            <div class="tab-pane" id="tab_a">
+			        <?php echo '<div class="tab-pane',  isset($_GET["profil"]) ? ' active' : '', '" id="tab_a">';?>
+			            <!-- <div class="tab-pane active" id="tab_a"> -->
 			            	<div class="table-responsive">
 			            		<?php
+			            			
+		            				$user_data = $controller->model->getUserData($_GET['id']);
+									
 			            			include('view/user_profile.php');
 			            			$task = $controller->model->getTask(-2, $_SESSION['UserData']->user_id);
 			            		?>
 			            	</div>	
 			            </div>
-			            <?php //echo '<div class="tab-pane',  isset($_SESSION["select_task"]) ? 'actice' : '', '" id="tab_b">';?>
-				        <div class="tab-pane active" id="tab_b">
+			            <?php echo '<div class="tab-pane',  isset($_GET["profil"]) ? '' : ' active', '" id="tab_b">';?>
+				         <!-- <div class="tab-pane" id="tab_b"> --> 
 				        	<div id="create_project_container">
 				        		
 				        	</div>
-				            <form action="profil.php" method="POST">
+				            <?php echo '<form method="POST" action="profil.php?id=', $_SESSION['UserData']->user_id.'&work">'; ?>
 				            	<div class="table-responsive">
 					            	<table class="table table-striped">
 										<tr>
@@ -113,6 +120,8 @@
 											<td>
 												<h4>Task Information</h4>
 											</td>
+											<td></td>
+											<td></td>
 										</tr>
 
 										<?php

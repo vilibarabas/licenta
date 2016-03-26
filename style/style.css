@@ -18,3 +18,13 @@
 	width: 80px;
 	height: 80px;
 }
+
+.hidden_a{
+
+	display:none;
+}
+
+#message{
+	width: 300px;
+	margin: 0 auto;
+}

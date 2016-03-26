@@ -85,6 +85,9 @@
                 </div>
               </form>
               <hr>
+              <div id="load_container">
+                
+              </div>
               <table class="table table-striped">
                 
                   <tr>
@@ -94,19 +97,16 @@
                     <td>Department</td>
                     <td>Acces Index</td>
                     <td>Function</td>
+                    <td>Edit</td>
                   </tr>
                 
                   <?php
-                  
+
                       $users = $controller->model->getAllUsers($department, $functie, $acces_index);
                       include('view/admin/print_all_users.php');
                   ?>
                 
               </table>
-              <div id="modal_aici">
-                <!-- Modal -->
-                
-              </div>
             </div>
           </div>
 
@@ -124,7 +124,4 @@
       </div>
     </div>
   </div>
-
-
-
 </body>

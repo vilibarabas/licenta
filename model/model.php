@@ -426,6 +426,83 @@ class Model
 
         return $rez;
     }
+
+    //------------------edit user
+    public function saveUserData($user_id, $name, $username, $department, $acces_index, $functie)
+    {
+        $this->dataBase->update('all_users')
+                        ->where('user_id')->is($user_id)
+                        ->set(array(
+                                 'name' => $name,
+                                 'username' => $username,
+                                 'department' => $department,
+                                 'acces_index' => $acces_index,
+                                 'functie' => $functie,
+                                 ));
+    }
+
+    public function getUserData($id)
+    {
+        $user['info'] =  $this->dataBase->from('all_users')
+                              ->where('user_id')->is($id)
+                              ->select()
+                              ->all()[0];
+        $user['task_count']['started'] = $this->dataBase->from('users_task_manager')
+                              ->where('user_id')->is($id)
+                              ->andWhere('percent')->greaterThan(0) //mai mare decat 0
+                              ->andWhere('percent')->lessThan(100) // mai mic decat 100
+                              ->count();
+
+        $user['task_count']['finished'] = $this->dataBase->from('users_task_manager')
+                              ->where('user_id')->is($id)
+                              ->andWhere('status')->is(2) //finished
+                              ->andWhere('percent')->is(100) // is 100
+                              ->count();
+
+        $user['task_count']['not_processed'] = $this->dataBase->from('users_task_manager')
+                              ->where('user_id')->is($id)
+                              ->andWhere('status')->is(0) //finished
+                              ->andWhere('percent')->is(0) // is 100
+                              ->count();
+
+        return $user;   
+    }
+
+    public function resetPassword($id, $password)
+    {
+        $this->dataBase->update('all_users')
+                        ->where('user_id')->is($id)
+                        ->set(array(
+                                 'password' => $password,
+                                 ));
+    }
+
+    public function getUserName($username)
+    {
+        $rez =  $this->dataBase->from('all_users')
+                              ->where('username')->is($username)
+                              ->select()
+                              ->all();
+
+        if(empty($rez))
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public function createNewUser($user, $password, $nume, $prenume)
+    {
+        $this->dataBase->insert(array(
+                                 'username' => $user,
+                                 'password' => $password,
+                                 'acces_index' => 0,
+                                 'functie' => '',
+                                 'name' => $nume. ' '. $prenume
+                                 ))
+                                 ->into('all_users');
+    }
 }
 
 // $conectInfo = array(

@@ -11,7 +11,9 @@ if(!empty($users))
 				<td>', $user->department,'</td>
 				<td>', $user->acces_index,'</td>
 				<td>', $user->functie,'</td>
-				<td><button type="button" class="btn btn-info edit_user" data-toggle="modal" data-target="#userModel_', $user->user_id,'" id="userModel_', $user->user_id,'">Edit</button></td>
+				<td><button type="button" class="btn btn-info edit_user" data-toggle="modal" data-target="#userModel_', $user->user_id,'" id="userModel_', $user->user_id,'">Edit</button>
+					<a target="_blank" class="btn btn-info edit_user" href="http://localhost/gitlab/firma/profil.php?id=', $user->user_id,'&profil"> View</a>
+				</td>
 			</tr>
 		';
 		echo '<div id="userModel_', $user->user_id,'" class="modal fade" role="dialog">
@@ -29,7 +31,7 @@ if(!empty($users))
 								<strong> User Id: </strong>
 							</div>
 							<div class="col-md-8">
-								<input class="form-control" id="edit_user_id" value="', $user->user_id,'"/>
+								<input disabled class="form-control" id="edit_user_id" value="', $user->user_id,'"/>
 							</div>                        
                         </div>
                         <div class="row">
@@ -76,7 +78,9 @@ if(!empty($users))
                       <div class="modal-footer">
                       <div class="row">
 							<div class="col-md-2">
-								<button type="button" class="btn btn-info float-left" id="save_edit_user">Save</button>
+								<div class="save_edit_user">
+									<button type="button" class="btn btn-info float-left"  data-dismiss="modal" id="user_', $user->user_id,'">Save</button>
+								</div>
 							</div>
 							<div class="col-md-10">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

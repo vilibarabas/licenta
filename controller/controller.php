@@ -21,8 +21,12 @@ class Controller
                'password' => '',
                );
         $this->headElements = array(
+                          'register' => array(
+                                            '<script src="js/user.js"></script>',
+                                            '<link rel="stylesheet" type="text/css" href="style/login.css">'
+                                            ),
                           'profil' => array(
-                                            
+                                            '<script src="js/user.js"></script>'
                                             ),
                           'contor' => array(
                                             '<script src="js/isActivContor.js"></script>',
@@ -31,6 +35,7 @@ class Controller
                           'administrator' => array(
                                             '<script src="js/admin.js"></script>'
                                             ),
+                          'login' => array('<link rel="stylesheet" type="text/css" href="style/login.css">')
                         );
         $this->model = new Model($this->conectInfo); 
         session_start();
