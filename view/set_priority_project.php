@@ -14,7 +14,7 @@
         		</select>
 			</td>
 			<td id="asignProject">
-				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="asignProject">Select Project</button>
+				<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalEdit" id="asignProject">Select Project</button>
 			</td>
 		</tr>
 	</table>

@@ -44,7 +44,7 @@ $(document).ready(function (){
 	});
 	$('#select_task_for_edit').change( function()	{
 		$.ajax({
-			url:"ajax/asign_project.php",
+			url:"ajax/edit_project.php",
 			type:"POST",
 			data: {taskId:$('#select_task_for_edit').val()},
 			success: function(result){

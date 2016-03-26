@@ -15,7 +15,7 @@ $controller = new Controller('profil');
 $task_asign = $m->getTask(-1, 1, $_POST['taskId']);
 
 echo '
-	<div class="modal fade" id="myModalAssign" role="dialog">
+	<div class="modal fade" id="myModalEdit" role="dialog">
 		<div class="modal-dialog">
 
 	  <!-- Modal content-->
