@@ -39,6 +39,12 @@ class Controller
                                             '<script src="js/ajax_item.js"></script>',
                                             '<script src="js/admin.js"></script>'
                                             ),
+                          'statistics' => array(
+                                            '<script src="js/statistics/statistics.js"></script>',
+                                            '<link rel="stylesheet" type="text/css" href="style/statistics.css">',
+                                            '<script src="js/statistics/ajax.js"></script>',
+                                            '<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>',
+                                            ),
                           'login' => array('<link rel="stylesheet" type="text/css" href="style/login.css">')
                         );
         $this->model = new Model($this->conectInfo); 
@@ -56,7 +62,7 @@ class Controller
     {
         echo '<link rel="stylesheet" type="text/css" href="style/style.css">
             <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">    
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
             <script src="js/ajax.js"></script>';
         if(isset($this->headElements[$page]))
@@ -97,6 +103,7 @@ class Controller
         echo "<span><a href=\"?action=logout\"> LogOut</a></span></p>";
         echo "<input id='user_name' hidden='hidden' value='", $_SESSION['UserData']->username, "'/>";
         echo "<input id='user_id' hidden='hidden' value='", $_SESSION['UserData']->user_id, "'/>";
+        echo "<input id='user_department' hidden='hidden' value='", $_SESSION['UserData']->department, "'/>";
         if(isset($_GET['action']))
         if($_GET['action'] === 'logout')
         {

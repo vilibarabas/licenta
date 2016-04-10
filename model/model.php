@@ -628,8 +628,7 @@ class Model
                                   ->all();
         }
         if($index == 1)
-        {
-            {
+        {     
             $rez = $this->dataBase->from('items_manager_table')
                             ->join(['all_users' => 'u'], function($join){
                                 $join->on('u.user_id', 'items_manager_table.user_id');
@@ -640,7 +639,6 @@ class Model
                                   ->where('items_manager_table.admin_accept')->is(0)
                                   ->select(['items_manager_table.register_nr' => 'nr', 'u.name' => 'userName', 'u.department' => 'department', 'i.name' => 'itemName', 'items_manager_table.team_leader_accept' => 'team_leader_accept'])
                                   ->all();
-        }   
         }
         return $rez;
     }
@@ -730,6 +728,21 @@ class Model
 
         return false;
 
+    }
+
+    public function getAllTaskForStatistics($year, $mounth, $department)
+    {
+        $rez = $this->dataBase->from('all_users')
+                            ->leftJoin(['users_task_manager' => 't'], function($join){
+                                $join->on('t.user_id', 'all_users.user_id');
+                             })
+                            ->leftJoin(['all_task_time_management' => 'a'], function($join){
+                                $join->on('a.task_id', 't.id');
+                             })  
+                              ->where('all_users.department')->is($department)
+                              ->select()
+                              ->all();
+        return $rez;
     }
 }
 
