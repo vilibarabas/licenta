@@ -19,7 +19,7 @@ if(!empty($task))
 	<td>',  $controller->model->getStatus($task->status), '
 	</td>
 	<td>
-		<select name="select_status">
+		<select class="form-control" name="select_status">
 	    	<option>select...</option>
     		', $controller->getSelectStatus($task->status), '
 		</select>		
@@ -36,7 +36,7 @@ if(!empty($task))
 		</div>
 	</td>
 	<td>
-		<select name="select_percent">';
+		<select class="form-control" name="select_percent">';
 				for($i = 0; $i <= 100; $i+=10)
 				{
 

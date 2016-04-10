@@ -1,6 +1,7 @@
 <?php
 
 require_once 'opis/database/autoload.php';
+//require_once '../core/helper.php';
 
 use Opis\Database\Database,
     Opis\Database\Connection,
@@ -265,7 +266,12 @@ class Model
                              'description' => $description,
                              'observation' => $observation,
                              ));
+        if($status == 1 || $status == 2)
+        {
+            $this->updateTaskTime($id, $status);
+        }
     }
+
     public function getallUsersFromTeam($team, $id)
     {
         return $this->dataBase->from('all_users')
@@ -321,7 +327,7 @@ class Model
 
     public function askForDelete($task)
     {
-        if($task->status != 0 || $task->percent != 0)
+        if($task->status != 0 || $task->percent != 0 || $task->user_id != null)
         {
             return 1;
         }
@@ -503,8 +509,231 @@ class Model
                                  ))
                                  ->into('all_users');
     }
+
+    //User items part
+
+    public function getUserItems($id, $ask = 1)
+    {
+        if($ask)
+        {
+            $rez = $this->dataBase->from('items_manager_table')
+                            ->join(['item_list' => 'i'], function($join){
+                                $join->on('i.index', 'items_manager_table.item_index');
+                             })
+                                  ->where('user_id')->is($id)
+                                  ->andWhere('admin_accept')->is(1)
+                                  ->select()
+                                  ->all();
+        }
+        else{
+            $rez = $this->dataBase->from('items_manager_table')
+                            ->join(['item_list' => 'i'], function($join){
+                                $join->on('i.index', 'items_manager_table.item_index');
+                             })
+                                  ->where('user_id')->is($id)
+                                  ->andWhere('admin_accept')->is(0)
+                                  ->select()
+                                  ->all();
+        }
+        if(empty($rez) && $ask == 1)
+        {
+            $this->addDeflaultItems($id);
+
+            return $this->getUserItems($id);
+        }
+        return $rez;
+    }
+
+    private function addDeflaultItems($id)
+    {
+        for($i = 1; $i <= 5; $i++)
+        {
+            $this->dataBase->insert(array(
+                                     'user_id' => $id,
+                                     'item_index' => $i,
+                                     'team_leader_accept' => 1,
+                                     'admin_accept' => 1
+                                     ))
+                                     ->into('items_manager_table');
+        }   
+    }
+
+    public function getItemList($type)
+    {
+        if($type == "mouse"){
+            return $this->dataBase->from('item_list')
+                                ->where('type')->isNot('monitor')
+                                ->andWhere('type')->isNot('unit')
+                                ->select()
+                                ->all();
+        }
+        $rez = $this->dataBase->from('item_list')
+                                ->where('type')->is($type)
+                                ->select()
+                                ->all();
+
+        return $rez;
+    }
+
+    public function getNewItem($item_index, $user_id)
+    {
+        if($this->viewAskLater($user_id, $item_index))
+        {
+            return false;
+        }
+
+        $this->dataBase->insert(array(
+                                     'user_id' => $user_id,
+                                     'item_index' => $item_index,
+                                     'team_leader_accept' => 0,
+                                     'admin_accept' => 0
+                                     ))
+                                     ->into('items_manager_table');
+        return true;
+    }
+
+    private function viewAskLater($user_id, $index)
+    {
+        $rez = $this->dataBase->from('items_manager_table')
+                                ->where('item_index')->is($index)
+                                ->andWhere('user_id')->is($user_id)
+                                ->andWhere('team_leader_accept')->is(0)
+                                ->andWhere('admin_accept')->is(0)
+                                ->select()
+                                ->all();        
+
+        if(!empty($rez))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getItemQuery($department, $index)
+    {
+
+        if($index == 2)
+        {
+            $rez = $this->dataBase->from('items_manager_table')
+                            ->join(['all_users' => 'u'], function($join){
+                                $join->on('u.user_id', 'items_manager_table.user_id');
+                             })
+                            ->join(['item_list' => 'i'], function($join){
+                                $join->on('i.index', 'items_manager_table.item_index');
+                             })
+                                  ->where('u.department')->is($department)
+                                  ->andWhere('items_manager_table.team_leader_accept')->is(0)
+                                  ->select(['items_manager_table.register_nr' => 'nr', 'u.name' => 'userName', 'u.department' => 'department', 'i.name' => 'itemName'])
+                                  ->all();
+        }
+        if($index == 1)
+        {
+            {
+            $rez = $this->dataBase->from('items_manager_table')
+                            ->join(['all_users' => 'u'], function($join){
+                                $join->on('u.user_id', 'items_manager_table.user_id');
+                             })
+                            ->join(['item_list' => 'i'], function($join){
+                                $join->on('i.index', 'items_manager_table.item_index');
+                             })
+                                  ->where('items_manager_table.admin_accept')->is(0)
+                                  ->select(['items_manager_table.register_nr' => 'nr', 'u.name' => 'userName', 'u.department' => 'department', 'i.name' => 'itemName', 'items_manager_table.team_leader_accept' => 'team_leader_accept'])
+                                  ->all();
+        }   
+        }
+        return $rez;
+    }
+
+    public function teamLeaderAccept($nr, $accept)
+    {
+        if($accept)
+        {
+            $this->dataBase->update('items_manager_table')
+                        ->where('register_nr')->is($nr)
+                        ->set(array(
+                                 'team_leader_accept' => 1
+                                 ));
+        }
+        else
+        {
+            $this->dataBase->update('items_manager_table')
+                        ->where('register_nr')->is($nr)
+                        ->set(array(
+                                 'team_leader_accept' => 2
+                                 ));
+        }
+    }
+
+    public function adminAccept($nr, $accept)
+    {
+        if($accept)
+        {
+            $this->dataBase->update('items_manager_table')
+                        ->where('register_nr')->is($nr)
+                        ->set(array(
+                                 'team_leader_accept' => 1,
+                                 'admin_accept' => 1
+                                 ));
+        }
+        else
+        {
+            $this->dataBase->from('items_manager_table')
+                        ->where('register_nr')->is($nr)
+                        ->delete();
+        }
+    }
+
+    public function getItemType()
+    {
+        return $this->dataBase->from('item_list')
+                                ->select(['index', 'name'])
+                                ->all();  
+    }
+
+    private function updateTaskTime($id, $status)
+    {
+        $time = Helper::getDate('d.m.Y H:i:s');
+        if($status == 1)
+        {
+            if($this->askStartTime($id))
+            {
+                $this->dataBase->insert(array(
+                                         'task_id' => $id,
+                                         'start_time' => $time,
+                                         ))
+                                         ->into('all_task_time_management');
+            }
+        }
+        if($status == 2)
+        {
+            $this->dataBase->update('all_task_time_management')
+                            ->where('task_id')->is($id)
+                            ->andWhere('end_time')->isNull()
+                            ->set(array(
+                                     'end_time' => $time,
+                                     ));
+        }       
+    }
+
+    private function askStartTime($id)
+    {
+        $rez = $this->dataBase->from('all_task_time_management')
+                                ->where('task_id')->is($id)
+                                ->andWhere('end_time')->isNull()
+                                ->select()
+                                ->all(); 
+        if(empty($rez))
+        {
+            return true;
+        }
+
+        return false;
+
+    }
 }
 
+        
 // $conectInfo = array(
 //           'host' => 'localhost',
 //           'database' => 'firma_database',

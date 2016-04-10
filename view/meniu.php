@@ -14,6 +14,10 @@
             if($_SESSION['UserData']->acces_index == 1)
              echo '<li ', $this->active == 'administrator' ? 'class="active"' : '', '><a href="administrator.php">Administrator</a></li>';
           ?>
+          <?php
+            if($_SESSION['UserData']->acces_index == 2)
+             echo '<li ', $this->active == 'statistics' ? 'class="active"' : '', '><a href="statistics.php">Team statistics</a></li>';
+          ?>
           <li <?php echo $this->active == 'contor' ? 'class="active"' : ''; ?>><a href="contor2.php">Contor</a></li>
           
           <li class="navbar-right"></li>

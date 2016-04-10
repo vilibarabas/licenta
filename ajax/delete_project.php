@@ -13,7 +13,9 @@ $m = new model($conectInfo);
 $sigur = 0;
 if(isset($_POST['sigur']))
 {
-	$sigur = $_POST['sigur'];
+	$val = finalyDelete();
+	if($val === $_POST['sigur'])
+		$sigur = 1;
 }
 
 if($_POST['delete_1'] !== 'select...')
@@ -38,6 +40,7 @@ else
 
 function askForDelete($why)
 {
+	$val = finalyDelete();
 	if($why)
 	{
 		echo '
@@ -46,12 +49,22 @@ function askForDelete($why)
 		        <a href="#" class="close" data-dismiss="alert">&times;</a>
 
 		        <strong>Atentie!</strong> Acest peoject este incepuit deja esti sigur ca vrei sa il stergi?.
-		        <input hidden id="sigurSterg" value="1"/>
+		        <input hidden id="sigurSterg" value="'.$val.'"/>
 		       	<strong>Apasa din nou pe stergere!</strong>
 		    </div>';
-
-		echo '<script src="js/contor.js"></script>';
 	}
+	elseif(isset($_POST['sigur']) && $val !== $_POST['sigur'])
+	{
+		echo '
+		    <div class="alert alert-warning">
+
+		        <a href="#" class="close" data-dismiss="alert">&times;</a>
+
+		        <strong>HEEEEEEEEEEEEEEEEEEEEEEE!</strong> Acest peoject este incepuit deja esti sigur ca vrei sa il stergi?.
+		        <input hidden id="sigurSterg" value="'.$val.'"/>
+		       	<strong>Apasa din nou pe stergere!</strong>
+		    </div>';
+	}	
 	else
 	{
 		echo '
@@ -63,4 +76,20 @@ function askForDelete($why)
 
 		    </div>';
 	}
+}
+
+function finalyDelete(){
+	$val = '';
+
+	if($_POST['delete_2'] !== 'select...')
+	{
+		$val = '1_'. $_POST['delete_2']. "_2";	
+	}
+	
+	if($_POST['delete_1'] !== 'select...')
+	{
+		$val = '1_'. $_POST['delete_1']. "_1";	
+	}
+
+	return $val;
 }

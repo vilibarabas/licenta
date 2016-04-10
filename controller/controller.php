@@ -26,6 +26,9 @@ class Controller
                                             '<link rel="stylesheet" type="text/css" href="style/login.css">'
                                             ),
                           'profil' => array(
+                                            '<link rel="stylesheet" type="text/css" href="style/item.css">',
+                                            '<script src="js/item.js"></script>',
+                                            '<script src="js/ajax_item.js"></script>',
                                             '<script src="js/user.js"></script>'
                                             ),
                           'contor' => array(
@@ -33,6 +36,7 @@ class Controller
                                             '<script src="js/contor.js"></script>',
                                             ),
                           'administrator' => array(
+                                            '<script src="js/ajax_item.js"></script>',
                                             '<script src="js/admin.js"></script>'
                                             ),
                           'login' => array('<link rel="stylesheet" type="text/css" href="style/login.css">')
@@ -226,7 +230,7 @@ class Controller
             $this->addZero($totalhr);
             echo "<tr>";
             echo "<td><center>Timp total lucrat</center></td>";
-            echo "<td><center>", $totalhr ? $totalhr : "00" , " : ", $totalmin ? $totalmin : "00", " : ", $totalsec ? $totalsec : "00" ,"</center></td>";
+            echo "<td><center id='total_hours'>", $totalhr ? $totalhr : "00" , " : ", $totalmin ? $totalmin : "00", " : ", $totalsec ? $totalsec : "00" ,"</center></td>";
             echo "<td><center>".  $result[0]->start_time . '<br/>'. $result[count($result)-1]->end_time ."</center></td>";
             echo "</tr>";
         }
@@ -278,5 +282,20 @@ class Controller
             if($_POST[$key] != 'All')
                 return $_POST[$key];
         return false;
+    }
+    //profile item select 
+
+    public function selectItem($type)
+    {
+        $list = $this->model->getItemList($type);
+        
+        echo '<select class="form-control" id="select_', $type,'"><option value="0">Select...</option>';
+
+        foreach($list as $li)
+        {
+            echo '<option value="', $li->index,'">', $li->name,'</optopn>';
+        }
+
+        echo '</select>';
     }
 }

@@ -4,6 +4,7 @@
 	<title>Licenta</title>
 	<?php
 			include "controller/controller.php";
+			include "core/helper.php";
 		    $controller = new Controller('profil');
 	?>
         
@@ -20,24 +21,24 @@
 	 			<div class="col-md-2">
 	 				<div class="row">	
 				        <ul class="nav">
-				          <?php 
+				           <?php 
 				          	
 					          	echo '<li ',  isset($_GET["profil"]) ? ' class="active"' : '', '><a href="#tab_a" data-toggle="tab" href="">Profil</a></li>'; 
 					        
 						  		echo '<li ',  isset($_GET["profil"]) ? '' : ' class="active"', '><a href="#tab_b" data-toggle="tab"> Work manager</a></li>';
+						  		echo '<li><a href="#tab_e" data-toggle="tab"> Items</a></li>';
 						  
 						  	if($_SESSION['UserData']->acces_index == 2)
 						  	{
+						  		echo '<li><a href="#tab_f" data-toggle="tab">Ask Item</a></li>';	 
 						  		echo '<li><a href="#tab_c" data-toggle="tab">Assign Project</a></li>';
-						  		echo '<li><a href="#tab_d" data-toggle="tab">Edit Project</a></li>';
-						  		echo '<li><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalCreate" id="asignProject11">Create Project</button></li>';
-						  		 
+						  		echo '<li><a href="#tab_d" data-toggle="tab">Edit Project</a></li>';	 
 						  	}
 						  ?>
 				        </ul>
 				    </div>
 			    </div>
-			    <div class="col-md-8">
+			    <div class="col-md-9">
 			        <div class="tab-content">
 			        <?php echo '<div class="tab-pane',  isset($_GET["profil"]) ? ' active' : '', '" id="tab_a">';?>
 			            <!-- <div class="tab-pane active" id="tab_a"> -->
@@ -53,9 +54,7 @@
 			            </div>
 			            <?php echo '<div class="tab-pane',  isset($_GET["profil"]) ? '' : ' active', '" id="tab_b">';?>
 				         <!-- <div class="tab-pane" id="tab_b"> --> 
-				        	<div id="create_project_container">
-				        		
-				        	</div>
+				        	
 				            <?php echo '<form method="POST" action="profil.php?id=', $_SESSION['UserData']->user_id.'&work">'; ?>
 				            	<div class="table-responsive">
 					            	<table class="table table-striped">
@@ -141,14 +140,24 @@
 								<div class="tab-pane" id="tab_d">';
 					            	
 					            include('view/set_priority_project.php');
-					            
-					            echo '</div>
-									<div class="create_project">';
-					            
-					            include('view/create_new_project.php');
-					            
 					            echo '</div>';
+					            echo '<div class="tab-pane" id="tab_f">';
+							
+								
+								include('view/ask_item_view.php');
+								
+								echo '</div>';
 							}
+							echo '<div class="tab-pane" id="tab_e">';
+							
+							$items = $controller->model->getUserItems($_SESSION['UserData']->user_id, 1);
+							$items = helper::orderItems($items);
+							
+							$items_asked = $controller->model->getUserItems($_SESSION['UserData']->user_id, 0);
+							$items_asked = helper::orderItems($items_asked);
+							include('view/item_view.php');
+							
+							echo '</div>';
 						?>
 					</div>
 			    </div>

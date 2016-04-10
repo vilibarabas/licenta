@@ -26,6 +26,7 @@
             <li class="active"><a href="#tab_a" data-toggle="tab">Users Administrate</a></li>
             <li><a href="#tab_b" data-toggle="tab">Electric Admin</a></li>
             <li><a href="#tab_c" data-toggle="tab">Other Admin</a></li>
+            <li><a href="#tab_d" data-toggle="tab">Item install</a></li>
           </ul>
         </div>
       </div>
@@ -39,7 +40,7 @@
                   <div class="col-md-1">
                     <span>SortBy</span>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <span>Department</span>
                   
                     <select name="select_department">
@@ -120,6 +121,12 @@
 
             </div>
           </div>
+          <div class="tab-pane" id="tab_d">
+            <div class="table-responsive">
+            <?php include('view/admin/item_install_view.php'); ?>
+            </div>
+          </div>
+                
         </div>
       </div>
     </div>

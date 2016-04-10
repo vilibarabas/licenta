@@ -1,5 +1,14 @@
 profil picture img:
 http://blog.ramboll.com/fehmarnbelt/wp-content/themes/ramboll2/images/profile-img.jpg
-
+monitor img:
+http://www.drfoster.com/wp-content/themes/telstra/img/tools__monitor@2x.png
+unitate img:
+http://cdn.clubafaceri.ro/clients/53/100346/15/unitate-pc-hp-dc7800-3649751_big.jpg
+tastatura img:
+https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQL7090uNwO59LyGfvOwzIfLXjT4Dwsin2q6YHVMd0zXa_2s53D
+mouse img:
+http://4.grgs.ro/images/products/1/4/260143/normal/comfort-mouse-6000-0c48603aeb51c69e087f1637dc32ebb4.jpg
+casti img:
+https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbNDDEU-31DDZknR8w3ovUBTUKwXpaseSDGEao3Xd5GNzB1_9J
 login style
 http://bootsnipp.com/similar/a6Pdk

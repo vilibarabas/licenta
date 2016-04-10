@@ -1,0 +1,31 @@
+.monitor,.unitate, .monitor_new_item{
+	width:150px;	
+	height: 150px;
+	display: table;
+     margin: 0 auto;
+}
+.monitor_new_item{
+	opacity: 0.6;
+}
+
+.tastatura{
+
+	width:200px;	
+	height: 70px;
+	display: table;
+     margin: 0 auto;
+}
+
+.mouse, .casti{
+	width:100px;	
+	height: 100px;
+	display: table;
+     margin: 0 auto;
+}
+
+.dropdown-menu{
+	
+	width: 250px;
+	height: 100px;
+    margin: 0 auto;
+}
