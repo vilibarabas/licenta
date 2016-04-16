@@ -145,6 +145,7 @@ class Model
         {
            return $this->dataBase->from('users_task_manager')
                              ->where('user_id')->isNull()
+                             ->orWhere('user_id')->is(0)
                              ->select()
                              ->all();
         }
@@ -266,13 +267,13 @@ class Model
                              'description' => $description,
                              'observation' => $observation,
                              ));
-        if($status == 1 || $status == 2)
+        if($status == 1 || $status == 2 || $status == 3)
         {
             $this->updateTaskTime($id, $status);
         }
     }
 
-    public function getallUsersFromTeam($team, $id)
+    public function getallUsersFromTeam($team)
     {
         return $this->dataBase->from('all_users')
                                  ->where('department')->like($team)
@@ -711,6 +712,15 @@ class Model
                             ->set(array(
                                      'end_time' => $time,
                                      ));
+        }
+        if($status == 3)
+        {
+            $this->dataBase->update('all_task_time_management')
+                            ->where('task_id')->is($id)
+                            ->andWhere('end_time')->isNull()
+                            ->set(array(
+                                     'end_time' => $time,
+                                     ));
         }       
     }
 
@@ -740,6 +750,7 @@ class Model
                                 $join->on('a.task_id', 't.id');
                              })  
                               ->where('all_users.department')->is($department)
+                              ->andWhere('a.start_time')->like('%'.$mounth.'.'.$year.'%')
                               ->select()
                               ->all();
         return $rez;

@@ -18,6 +18,6 @@
 		</tr>
 	</table>
 	<!-- Modal content-->
-	<div id="load_container">
+	<div id="load_container_asign">
 	</div>
 </div>

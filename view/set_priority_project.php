@@ -62,6 +62,6 @@
 	echo '</div>';
 	?>
 	<!-- Modal content-->
-	<div id="load_container_2">
+	<div id="load_container_edit">
 	</div>
 </div>

@@ -38,7 +38,7 @@ $(document).ready(function (){
 			type:"POST",
 			data: {taskId:$('#select_task_for_asign').val()},
 			success: function(result){
-				$('#load_container').html(result);
+				$('#load_container_asign').html(result);
 			}
 		});
 	});
@@ -48,7 +48,7 @@ $(document).ready(function (){
 			type:"POST",
 			data: {taskId:$('#select_task_for_edit').val()},
 			success: function(result){
-				$('#load_container_2').html(result);
+				$('#load_container_edit').html(result);
 			}
 		});
 	});

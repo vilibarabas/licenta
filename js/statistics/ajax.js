@@ -9,6 +9,7 @@ $(document).ready(function (){
 			success: function(data) {
 				 $(".loader").fadeOut();
 				 $("#list_content").html(data);
+				 new Info($('table tr td').has('div'));
 				}
 			
 		});
@@ -23,6 +24,7 @@ $(document).ready(function (){
 			success: function(data) {
 				 $(".loader").fadeOut();
 				 $("#list_content").html(data);
+				 new Info($('table tr td').has('div'));
 				}
 			
 		});
@@ -38,6 +40,7 @@ $(document).ready(function (){
 			success: function(data) {
 			  $(".loader").fadeOut();
 			  $("#list_content").html(data);
+			  new Info($('table tr td').has('div'));
 			}
 		});
 	});

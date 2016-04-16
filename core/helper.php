@@ -1,5 +1,9 @@
 <?php
 
+include('timeDif.php');
+
+use TimeDifference as T;
+
 class Helper{
 
 	public static function orderItems($items)
@@ -100,15 +104,24 @@ class Helper{
 		return $dt->format($format);
 	}
 
-	public static function normalizeStatisticData($data)
+	public static function normalizeStatisticData($data, $users)
 	{
+
 		$rez = array();
 		foreach($data as $d){
 			if(!isset($rez[$d->name]))
 			{
-				$rez[$d->name] = array();	
+				$rez[$d->name] = array();
 			}
 			$rez[$d->name][] = $d;
+		}
+
+		foreach($users as $u)
+		{
+			if(!isset($rez[$u->name]))
+			{
+				$rez[$u->name] = array();
+			}
 		}
 
 		return $rez;
@@ -130,12 +143,82 @@ class Helper{
 
 	public static function printStatisticsTaskInfo($t)
 	{
-		$text = '<div class="dropdown-menu">';
-		$text .= '<p><strong>Name: <strong>'. $t->task_name.'</p>';
-		$text .= '<p><strong>Status: <strong>'. self::getClassForStatus($t->status).'</p>';
-		$text .= '<p><strong>Procent: <strong>'. $t->percent.'</p>';
-		$text .= '</div>';
+		$text  = '<div class="dropdown-menu">';
+		$text .= '<table class="table">';
+		$text .= '<tr><td><strong>Utilizator: </strong></td><td>'. $t->task_name.'</td></tr>';
+		$text .= '<tr><td><strong>Nume proiect: </strong></td><td>'. $t->task_name.'</td></tr>';
+		$text .= '<tr><td><strong>Status: </strong></td><td>'. self::getClassForStatus($t->status).'</td></tr>';
+		$text .= '<tr><td><strong>Procent: </strong></td><td>'. $t->percent.'</td></tr>';
+		$text .= '<tr><td><strong>Timp estimat: </strong></td><td>'. $t->time.'</td></tr>';
+		$text .= '<tr><td><strong>Descriere: </strong></td><td><textarea rows="4" cols="16">'. $t->description.'"</textarea></td></tr>';
+		$text .= '</table></div>';
 		echo $text;
+	}
+
+	public static function printHours($t, $all, $key1)
+	{
+		$t->dif = '0d 0h';
+		if($t->end_time)
+		{
+			$time = new T();
+			$dif = $time->calculDifTime($t->end_time, $t->start_time);			
+			$t->dif = self::timeCalcul($t->time, $dif[2]. 'd '. $dif[3]. 'h');
+			foreach($all as $key => $val)
+			{
+				if($key !== $key1 && $val->task_time_id === $t->task_time_id)
+				{
+					$dif = $time->calculDifTime($val->end_time, $val->start_time);			
+					$t->dif = self::timeCalcul($t->dif, $dif[2]. 'd '. $dif[3]. 'h');
+				}
+			}
+			print_r($t->dif);
+		}
+		else
+		{
+			echo 'P';
+		}
+		return $t->dif; 
+	}
+
+	public static function printTotalHours($t)
+	{
+		$total = '0d 0h';
+		if(!empty($t))
+			foreach($t as $val)
+			{
+				$total = self::timeCalcul($val, $total);
+			}
+		return $total;
+	}
+
+	public static function timeCalcul($estim, $work)
+	{
+		$estim = str_replace(array('h', 'd'), '', explode(' ', $estim));
+		$work = str_replace(array('h', 'd'), '', explode(' ', $work));
+		$dif[0] = $estim[0] - $work[0];
+		$dif[1] = $estim[1] - $work[1];
+		return $dif[0].'d '. $dif[1].'h'; 
+	}
+
+	public static function printStatisticsTableHeader()
+	{
+		echo '<tr id="table_header">';
+		for($i = 0; $i < 32; $i++){
+			echo '<td>';
+			if($i == 0){
+				echo '<strong> Name</strong>';
+			}
+			elseif($i == 31)
+			{
+				echo '<strong>total</strong>';
+			}
+			else
+			{
+				echo '<strong>', $i , '</strong>';
+			}
+
+			echo '</td>';
+		}
 	}
 }
 
