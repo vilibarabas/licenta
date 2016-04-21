@@ -533,6 +533,7 @@ class Model
                              })
                                   ->where('user_id')->is($id)
                                   ->andWhere('admin_accept')->is(0)
+                                  ->andWhere('team_leader_accept')->isNot(2)
                                   ->select()
                                   ->all();
         }

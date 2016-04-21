@@ -79,5 +79,8 @@ function clickstop()
     stop = 1;
     document.getElementById("start_button").style.display = "block";
     document.getElementById("stop_button").style.display  = "none";
+    setTimeout(function(){
+    window.location.reload();
+  },1000);
 }
 

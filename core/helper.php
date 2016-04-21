@@ -145,39 +145,39 @@ class Helper{
 	{
 		$text  = '<div class="dropdown-menu">';
 		$text .= '<table class="table">';
-		$text .= '<tr><td><strong>Utilizator: </strong></td><td>'. $t->task_name.'</td></tr>';
-		$text .= '<tr><td><strong>Nume proiect: </strong></td><td>'. $t->task_name.'</td></tr>';
-		$text .= '<tr><td><strong>Status: </strong></td><td>'. self::getClassForStatus($t->status).'</td></tr>';
-		$text .= '<tr><td><strong>Procent: </strong></td><td>'. $t->percent.'</td></tr>';
-		$text .= '<tr><td><strong>Timp estimat: </strong></td><td>'. $t->time.'</td></tr>';
-		$text .= '<tr><td><strong>Descriere: </strong></td><td><textarea rows="4" cols="16">'. $t->description.'"</textarea></td></tr>';
+		$text .= '<tr><th><strong>Utilizator: </strong></th><td>'. $t->task_name.'</td></tr>';
+		$text .= '<tr><th><strong>Nume proiect: </strong></th><td>'. $t->task_name.'</td></tr>';
+		$text .= '<tr><th><strong>Status: </strong></td><th>'. self::getClassForStatus($t->status).'</td></tr>';
+		$text .= '<tr><th><strong>Procent: </strong></td><th>'. $t->percent.'</td></tr>';
+		$text .= '<tr><th><strong>Timp estimat: </strong></th><td>'. $t->time.'</td></tr>';
+		$text .= '<tr><th><strong>Descriere: </strong></th><td><textarea rows="4" cols="16">'. $t->description.'</textarea></td></tr>';
 		$text .= '</table></div>';
 		echo $text;
 	}
 
 	public static function printHours($t, $all, $key1)
 	{
-		$t->dif = '0d 0h';
+		$t_dif = '0d 0h';
 		if($t->end_time)
 		{
 			$time = new T();
 			$dif = $time->calculDifTime($t->end_time, $t->start_time);			
-			$t->dif = self::timeCalcul($t->time, $dif[2]. 'd '. $dif[3]. 'h');
+			$t_dif = self::timeCalcul($t->time, $dif[2]. 'd '. $dif[3]. 'h');
 			foreach($all as $key => $val)
 			{
 				if($key !== $key1 && $val->task_time_id === $t->task_time_id)
 				{
 					$dif = $time->calculDifTime($val->end_time, $val->start_time);			
-					$t->dif = self::timeCalcul($t->dif, $dif[2]. 'd '. $dif[3]. 'h');
+					$t_dif = self::timeCalcul($t->dif, $dif[2]. 'd '. $dif[3]. 'h');
 				}
 			}
-			print_r($t->dif);
+			print_r($t_dif);
 		}
 		else
 		{
 			echo 'P';
 		}
-		return $t->dif; 
+		return $t_dif; 
 	}
 
 	public static function printTotalHours($t)
@@ -186,7 +186,7 @@ class Helper{
 		if(!empty($t))
 			foreach($t as $val)
 			{
-				$total = self::timeCalcul($val, $total);
+				$total = self::timeCalculTotal($val, $total);
 			}
 		return $total;
 	}
@@ -194,12 +194,32 @@ class Helper{
 	public static function timeCalcul($estim, $work)
 	{
 		$estim = str_replace(array('h', 'd'), '', explode(' ', $estim));
-		$work = str_replace(array('h', 'd'), '', explode(' ', $work));
+		$work = str_replace(array('h', 'd'), '', explode(' ', $work));	
+
 		$dif[0] = $estim[0] - $work[0];
 		$dif[1] = $estim[1] - $work[1];
+		if($dif[1] < 0 && $dif[0] > 0)
+		{
+			$dif[1] += 24;
+			$dif[0]--;
+		}
 		return $dif[0].'d '. $dif[1].'h'; 
 	}
 
+	public static function timeCalculTotal($estim, $work)
+	{
+		$estim = str_replace(array('h', 'd'), '', explode(' ', $estim));
+		$work = str_replace(array('h', 'd'), '', explode(' ', $work));	
+
+		$dif[0] = $estim[0] + $work[0];
+		$dif[1] = $estim[1] + $work[1];
+		if($dif[1] < 0 && $dif[0] > 0)
+		{
+			$dif[1] += 24;
+			$dif[0]--;
+		}
+		return $dif[0].'d '. $dif[1].'h'; 
+	}
 	public static function printStatisticsTableHeader()
 	{
 		echo '<tr id="table_header">';
@@ -210,7 +230,7 @@ class Helper{
 			}
 			elseif($i == 31)
 			{
-				echo '<strong>total</strong>';
+				echo '<strong>Randament</strong>';
 			}
 			else
 			{

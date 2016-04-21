@@ -37,17 +37,16 @@ foreach($all_task as $key => $t)
 {
   $time_dif[$key] = array();
 	echo '<tr><th class="empty_td">'.$key.'</th>';
-		
+	$j = 0;
 	for($i = 0; $i < 30; $i++)
 	{
 		if(isset($t[$i]))
 		{
 
 			echo '<td class="'. Helper::getClassForStatus($t[$i]->status).'">';
-        $time_dif[$key][$t[$i]->task_id] = Helper::printHours($t[$i], $t, $i);
-				
-        Helper::printStatisticsTaskInfo($t[$i]);
-        
+      $temp = Helper::printHours($t[$i], $t, $i);
+      $time_dif[$key][$t[$i]->task_id] =  !isset($time_dif[$key][$t[$i]->task_id]) ? $temp : $time_dif[$key][$t[$i]->task_id];
+			Helper::printStatisticsTaskInfo($t[$i]);  
 			echo '</td>';
 		}
 		else
@@ -56,7 +55,13 @@ foreach($all_task as $key => $t)
 		}
 	}
   $time_dif[$key]['total'] = Helper::printTotalHours($time_dif[$key]);
-  echo '<td class="empty_td">'. $time_dif[$key]['total'].'</td>';
+  if(strpos($time_dif[$key]['total'], '-') !== FALSE){
+    echo '<td class="rand_rau"><span class="glyphicon glyphicon-arrow-down"> </span> <vr />';
+  }
+  else{
+    echo '<td class="rand_bun"><span class="glyphicon glyphicon-arrow-up"> </span> <vr />';
+  }
+  echo  $time_dif[$key]['total'].'</td>';
 	echo '</tr>';
 }
 

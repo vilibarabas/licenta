@@ -40,7 +40,7 @@
 
                         <tr>
                             <td>
-                                <center><button id="start_button" type="submit" onclick="clickStart()" class="label label-success" style="width:100%"><h4>START</h4></button></center>
+                                <center><button id="start_button" type="submit" onclick="clickStart()"  class="label label-success" style="width:100%"><h4>START</h4></button></center>
                                 <center><button id="stop_button" type="submit" onclick="clickstop()" class="label label-danger" style="width:100%;display:none" ><h4>OPRESTE</h4></button></center>
                             </td>
                             <td>
