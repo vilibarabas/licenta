@@ -1,14 +1,16 @@
 <?php
 require_once '../../model/model.php';
 require_once '../../core/helper.php';
+require("../../core/phpmailer.php");
+require("../../core/smtp.php");
 
 date_default_timezone_set('Europe/Bucharest');
 
 $date = date('Y-m-d H:i:s');
 $text = $_GET['text'];
-//$text = str_replace('+' , '<br>', $text);
-$text = nl2br($text);
 
+$text = nl2br($text);
+$text = str_replace('<br />' , ' ', $text);
 if($_GET['send'])
 {
 	if(!!$_GET['to'])
@@ -17,12 +19,29 @@ if($_GET['send'])
 		
 		foreach($emails as $email)
 		{
-			$head = "From: example@example.com\r\n";
-		    $head .= "Content-type: text/html\r\n";
-		    $title= "Title Test";
-		    $body = "The text in the textarea";  
-		    $success = mail($email, $title, $text, $head);
-		    echo PHP_EOL, 'SUCCES', PHP_EOL;
+			$mail = new PHPMailer();
+
+			$mail->IsSMTP();
+			$mail->SMTPAuth = true; // enable SMTP authentication
+			$mail->SMTPSecure = "ssl"; 
+			$mail->Host = "plus.smtp.mail.yahoo.com";
+			$mail->Port = 465; // set the SMTP port
+			$mail->Username = $email;
+			$mail->Password = "123ewq321"; 
+			$mail->From = $email;
+			$mail->FromName = $_GET['user'];
+			$mail->AddAddress($email);
+			$mail->Subject = "Raport ". $date;
+			$mail->Body = $text;
+
+			if(!$mail->Send())
+			{
+				Helper::message('Mesajul nu s-a trimis <br>Mailer error: '. $mail->ErrorInfo, 'danger');
+			}
+			else
+			{
+				Helper::message('Raportul a fos trimis cu succes pe adresa '. $email, 'success');
+			}
 		}	
 	}	
 }
@@ -40,6 +59,5 @@ $m = new model($conectInfo);
 
 if(!!$_GET['text']){
 	$m->saveRaport($text, $date, $_GET['userId']);
-
-	Helper::message('Raportul a fost trimis cu succes!', 'success');
+	Helper::message('Raportul a fost salvat cu succes!', 'success');
 }

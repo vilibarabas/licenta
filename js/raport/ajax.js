@@ -10,7 +10,7 @@ $(document).ready(function (){
 		$.ajax({
 			url:"ajax/raport/send_raport.php",
 			type:"GET",
-			data: {to:$('#to_email').val(),userId:$('#user_id').val(),text:$('#email_message').val(),send:send}
+			data: {to:$('#to_email').val(),userId:$('#user_id').val(),text:$('#email_message').val(),send:send,user:$('#user_full_name').val()}
 		}).done(function(result){
 			$(".loader").fadeOut();
 			$('.raport_send_succes').html(result);

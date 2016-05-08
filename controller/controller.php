@@ -121,6 +121,7 @@ class Controller
         echo "<p id=\"logout_container\" class=\"navbar-right\" style=\"margin:0 auto;padding-top:10px;color:#FFFFFF;font-size:15px;\"><span> Hello ", $_SESSION['UserData']->name, "  </span>";
         echo "<span><a href=\"?action=logout\"> LogOut <span class='glyphicon glyphicon-log-out'></span></a></span></p>";
         echo "<input id='user_name' hidden='hidden' value='", $_SESSION['UserData']->username, "'/>";
+        echo "<input id='user_full_name' hidden='hidden' value='", $_SESSION['UserData']->name, "'/>";
         echo "<input id='user_id' hidden='hidden' value='", $_SESSION['UserData']->user_id, "'/>";
         echo "<input id='user_department' hidden='hidden' value='", $_SESSION['UserData']->department, "'/>";
         if(isset($_GET['action']))

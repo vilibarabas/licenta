@@ -163,7 +163,7 @@
         var row = $(this.settings.rowHeader);
         row.css({'background-color': this.colors.tr});
         dateContainer.append(row);
-        day = this.createDay(this.settings.day, '');
+        day = this.createDay(this.settings.dayHead, '');
         row.append(day);
         
         for(var i = 0; i < weeks.length; i++) {
