@@ -1,5 +1,5 @@
 $(document).ready(function (){
-	$('#start_button').click( function()	{
+	$('#start_button').click( function(){
 		$.ajax({
 			url:"ajax/get_contor_data.php",
 			type:"POST",
@@ -11,7 +11,7 @@ $(document).ready(function (){
 		$.ajax({
 			url:"ajax/get_contor_data.php",
 			type:"POST",
-			data: {userName:$('#user_name').val(),userId:$('#user_id').val(),start:0}
+			data: {userName:$('#user_name').val(),userId:$('#user_id').val(),start:0,min:$('#txt').text()}
 		});
 	});
 
@@ -24,7 +24,6 @@ $(document).ready(function (){
 	});
 
 	$('#save_project_update').click( function()	{
-
 		$.ajax({
 			url:"ajax/save_task_data.php",
 			type:"POST",

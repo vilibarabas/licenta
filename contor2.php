@@ -59,10 +59,10 @@
             </div>
             <div class="tab-pane" id="tab_b">
                 <div class="table-responsive">
-                    
                         <?php 
                             $controller->getAllWorkingTime($_SESSION['UserData']->user_id);
                          ?>
+                </table>
                 </div>
             </div>
         </div>

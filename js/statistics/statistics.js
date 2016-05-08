@@ -85,8 +85,8 @@ SetData.prototype.nextYear = function(){
 function Info(elements){
         $(elements).hover(function(e) {
         $($(this).children()).css({
-            left: e.pageX + 1,
-            top: e.pageY + 1
+            left: e.pageX + 5,
+            top: e.pageY -150
         }).stop().show(100);
     }, function() {
         $($(this).children()).hide();
@@ -98,6 +98,5 @@ $(document).ready(function(){
     var element = $('#data_input');
     new SetData(element);
     });
-
 
 window.addEventListener('load', onload);

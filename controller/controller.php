@@ -32,8 +32,17 @@ class Controller
                                             '<script src="js/user.js"></script>'
                                             ),
                           'contor' => array(
-                                            '<script src="js/isActivContor.js"></script>',
-                                            '<script src="js/contor.js"></script>',
+                                            '<script src="js/contor/isActivContor.js"></script>',
+                                            '<script src="js/contor/contor.js"></script>',
+                                            
+                                            ),
+                          'raport' => array(
+                                            '<script src="js/raport/ajax.js"></script>',
+                                            
+                                            ),
+                          'time_management' => array(
+                                            '<link rel="stylesheet" type="text/css" href="style/time_management.css">',
+                                            '<script src="js/contor/time_management.js"></script>',
                                             ),
                           'administrator' => array(
                                             '<script src="js/ajax_item.js"></script>',
@@ -43,7 +52,8 @@ class Controller
                                             '<script src="js/statistics/statistics.js"></script>',
                                             '<link rel="stylesheet" type="text/css" href="style/statistics.css">',
                                             '<script src="js/statistics/ajax.js"></script>',
-                                            '<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>',
+                                            '<script src="lib/jquery-1.11.3.min.js"></script>',
+                                            //<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
                                             ),
                           'login' => array('<link rel="stylesheet" type="text/css" href="style/login.css">')
                         );
@@ -61,10 +71,17 @@ class Controller
     private function addHead($page)
     {
         echo '<link rel="stylesheet" type="text/css" href="style/style.css">
+                <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
+                <script src="lib/jquery.min.js"></script>
+                <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+                <script src="js/ajax.js"></script>';
+
+            /*
             <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">    
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-            <script src="js/ajax.js"></script>';
+
+            */
         if(isset($this->headElements[$page]))
             foreach($this->headElements[$page] as $val)
             {
@@ -89,6 +106,8 @@ class Controller
     
     public function getMeniu()
     {
+          
+              $this->logOut();
         $this->active = $this->page;
         include 'view/meniu.php';
     }
@@ -99,8 +118,8 @@ class Controller
             header("location:login.php");
         }
 
-        echo "<p class=\"navbar-right\" style=\"margin:0 auto;padding-top:10px;color:#FFFFFF;font-size:15px;\"><span> Hello ", $_SESSION['UserData']->name, "</span>";
-        echo "<span><a href=\"?action=logout\"> LogOut</a></span></p>";
+        echo "<p id=\"logout_container\" class=\"navbar-right\" style=\"margin:0 auto;padding-top:10px;color:#FFFFFF;font-size:15px;\"><span> Hello ", $_SESSION['UserData']->name, "  </span>";
+        echo "<span><a href=\"?action=logout\"> LogOut <span class='glyphicon glyphicon-log-out'></span></a></span></p>";
         echo "<input id='user_name' hidden='hidden' value='", $_SESSION['UserData']->username, "'/>";
         echo "<input id='user_id' hidden='hidden' value='", $_SESSION['UserData']->user_id, "'/>";
         echo "<input id='user_department' hidden='hidden' value='", $_SESSION['UserData']->department, "'/>";
@@ -117,40 +136,74 @@ class Controller
     {
         $model = new Model($this->conectInfo);
         $result = $model->getAllWorking($id);
-        
+        $total = array();
+        $total['hr'] = 0;
+        $total['min'] = 0;
+        $total['sec'] = 0;
+
         $inainte = '1111';
         if(!empty($result))
         {
             foreach($result as $rez)
             {
-                if(empty($rez->end_time))
-                {
-                    continue;
-                }
-                list($h1, $m1, $s1) = explode(':', explode(' ',  $rez->start_time)[1]);
-                list($h2, $m2, $s2) = explode(':', explode(' ',  $rez->end_time)[1]);
-                $hr = $h2-$h1;
-                $min = $m2-$m1;
-                $sec = $s2-$s1;
-                if($sec < 0)
-                {
-                    $min--;
-                    $sec += 60;
-                }
-
-                if($min < 0)
-                {
-                    $hr--;
-                    $min += 60;
-                }
                 
+                $datetime1 = new DateTime($rez->start_time);
+                $datetime2 = new DateTime($rez->end_time);
+                $dif = $datetime1->diff($datetime2);
+                
+                $hr = $dif->h;
+                $min = $dif->i;
+                $sec = $dif->s;
+                if($inainte !== '1111')
+                {
+                    $total['hr'] += $hr;
+                    $total['min'] += $min;
+
+                    if($total['min'] >= 60)
+                    {
+                        $total['hr']++;
+                        $total['min'] -= 60;
+                    }
+                    $total['sec'] += $sec;
+                    if($total['sec'] >= 60)
+                    {
+                        $total['min']++;
+                        $total['sec'] -= 60;
+                    }
+                }
                 $this->addZero($sec);
                 $this->addZero($min);
                 $this->addZero($hr);
                 if(!strstr($rez->start_time, $inainte))
                 {
                     if($inainte !== '1111')
-                    {
+                    {   
+                        $this->addZero($total['sec']);
+                        $this->addZero($total['min']);
+                        $this->addZero($total['hr']);
+                        echo "<tr>";
+                        echo "<td><center>Timp total lucrat</center></td>";
+                        echo "<td><center id='total_hours'>", $total['hr'] ? $total['hr'] : "00" , " : ", $total['min'] ? $total['min'] : "00", " : ", $total['sec'] ? $total['sec'] : "00" ,"</center></td><td></td>";
+                        echo "</tr>";
+                        $total['hr'] = 0;
+                        $total['min'] = 0;
+                        $total['sec'] = 0;
+                        
+                        $total['hr'] += intval($hr);
+                        $total['min'] += intval($min);
+
+                        if($total['min'] >= 60)
+                        {
+                            $total['hr']++;
+                            $total['min'] -= 60;
+                        }
+                        $total['sec'] += intval($sec);
+                        if($total['sec'] >= 60)
+                        {
+                            $total['min']++;
+                            $total['sec'] -= 60;
+                        }
+                    
                         echo '</table>';
                     }
 
@@ -177,6 +230,14 @@ class Controller
                 echo "<td><center>". $rez->start_time. '<br/>'. $rez->end_time."</center></td>";
                 echo "</tr>";
             }
+            $this->addZero($total['sec']);
+            $this->addZero($total['min']);
+            $this->addZero($total['hr']);
+            echo "<tr>";
+            echo "<td><center>Timp total lucrat</center></td>";
+            echo "<td><center id='total_hours'>", $total['hr'] ? $total['hr'] : "00" , " : ", $total['min'] ? $total['min'] : "00", " : ", $total['sec'] ? $total['sec'] : "00" ,"</center></td><td></td>";
+            echo "</tr></table>";
+            
         }
     }
 
@@ -192,22 +253,15 @@ class Controller
         {
             foreach($result as $rez)
             {
-                list($h1, $m1, $s1) = explode(':', explode(' ',  $rez->start_time)[1]);
-                list($h2, $m2, $s2) = explode(':', explode(' ',  $rez->end_time)[1]);
-                $hr = $h2-$h1;
-                $min = $m2-$m1;
-                $sec = $s2-$s1;
-                if($sec < 0)
-                {
-                    $min--;
-                    $sec += 60;
-                }
 
-                if($min < 0)
-                {
-                    $hr--;
-                    $min += 60;
-                }
+                $datetime1 = new DateTime($rez->start_time);
+                $datetime2 = new DateTime($rez->end_time);
+                $dif = $datetime1->diff($datetime2);
+                
+                $hr = $dif->h;
+                $min = $dif->i;
+                $sec = $dif->s;
+                
                 $totalhr += $hr;
                 $totalmin += $min;
 
@@ -222,10 +276,10 @@ class Controller
                     $totalmin++;
                     $totalsec -= 60;
                 }
-
                 $this->addZero($sec);
                 $this->addZero($min);
                 $this->addZero($hr);
+                
                 echo "<tr>";
                 echo "<td><center>Timp lucrat</center></td>";
                 echo "<td><center>", $hr ? $hr : "00" , " : ", $min ? $min : "00", " : ", $sec ? $sec : "00" ,"</center></td>";
@@ -237,8 +291,15 @@ class Controller
             $this->addZero($totalhr);
             echo "<tr>";
             echo "<td><center>Timp total lucrat</center></td>";
-            echo "<td><center id='total_hours'>", $totalhr ? $totalhr : "00" , " : ", $totalmin ? $totalmin : "00", " : ", $totalsec ? $totalsec : "00" ,"</center></td>";
+            echo "<td><input id='total_time' value='", $totalhr ? $totalhr : "00" , " : ", $totalmin ? $totalmin : "00", " : ", $totalsec ? $totalsec : "00" ,"' hidden/><center id='total_hours'></center></td>";
             echo "<td><center>".  $result[0]->start_time . '<br/>'. $result[count($result)-1]->end_time ."</center></td>";
+            echo "</tr>";
+        }
+        else{
+            echo "<tr>";
+            echo "<td><center>Timp total lucrat</center></td>";
+            echo "<td><input id='total_time' value='00:00:00' hidden/><center id='total_hours'></center></td>";
+            echo "<td></center></td>";
             echo "</tr>";
         }
     }

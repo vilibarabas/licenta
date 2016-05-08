@@ -28,3 +28,34 @@
 	width: 300px;
 	margin: 0 auto;
 }
+
+.days_header{
+  background-color:red;
+}
+.days_body{
+  background-color:blue;
+}
+
+#header_img{
+  background: url("../img/menu_img1.jpg");  
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 120px;
+}
+
+#logout_container{
+  padding: 5px 5px 10px 5px;
+  background-color: #1a1a1a;
+  opacity: 0.9;
+}
+
+.loader {
+  position: fixed;
+  left: 0px;
+  top: 180px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url('../img/loader_gif.gif') 50% 50% no-repeat rgb(249,249,249);
+}

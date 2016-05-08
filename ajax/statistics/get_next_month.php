@@ -44,8 +44,8 @@ foreach($all_task as $key => $t)
 		{
 
 			echo '<td class="'. Helper::getClassForStatus($t[$i]->status).'">';
-      $temp = Helper::printHours($t[$i], $t, $i);
-      $time_dif[$key][$t[$i]->task_id] =  !isset($time_dif[$key][$t[$i]->task_id]) ? $temp : $time_dif[$key][$t[$i]->task_id];
+      $time_dif[$key][$t[$i]->task_id] = Helper::printHours($t[$i], $t, $i);
+      
 			Helper::printStatisticsTaskInfo($t[$i]);  
 			echo '</td>';
 		}

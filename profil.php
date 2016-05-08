@@ -23,7 +23,7 @@
 				        <ul class="nav">
 				           <?php 
 				          	
-					          	echo '<li ',  isset($_GET["profil"]) ? ' class="active"' : '', '><a href="#tab_a" data-toggle="tab" href="">Profil</a></li>'; 
+					          	echo '<li ',  isset($_GET["profil"]) ? ' class="active"' : '', '><a href="#tab_a" data-toggle="tab">Profil</a></li>'; 
 					        
 						  		echo '<li ',  isset($_GET["profil"]) ? '' : ' class="active"', '><a href="#tab_b" data-toggle="tab"> Work manager</a></li>';
 						  		echo '<li><a href="#tab_e" data-toggle="tab"> Items</a></li>';
@@ -159,9 +159,6 @@
 							
 							echo '</div>';
 						?>
-					</div>
-			    </div>
-		    </div>
-	    </div>
+					
 	</body>
 </html>

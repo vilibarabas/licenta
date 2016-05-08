@@ -3,12 +3,6 @@
     include "controller/controller.php";
     $controller = new Controller('index');
   ?>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-      <link rel="stylesheet" type="text/css" href="style/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="js/isActivContor.js"></script>
-    <script src="js/contor.js"></script>
-    <script src="js/ajax.js"></script>
 <body>
   <?php
     if(!isset($_SESSION['UserData']))
@@ -17,4 +11,8 @@
     }
     $controller->getMeniu('index');
   ?>
+  <div class="container">
+    <h2>Bun venit la IT Mania</h2>
+    <h4>Ca inceput de zi nu uita sa-ti pornesti contorul!</h4>
+  </div>
 </body>

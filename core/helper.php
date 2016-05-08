@@ -183,6 +183,7 @@ class Helper{
 	public static function printTotalHours($t)
 	{
 		$total = '0d 0h';
+		
 		if(!empty($t))
 			foreach($t as $val)
 			{
@@ -203,6 +204,12 @@ class Helper{
 			$dif[1] += 24;
 			$dif[0]--;
 		}
+
+		if($dif[1] > 23)
+		{
+			$dif[1] -= 24;
+			$dif[0]++;
+		}
 		return $dif[0].'d '. $dif[1].'h'; 
 	}
 
@@ -218,6 +225,13 @@ class Helper{
 			$dif[1] += 24;
 			$dif[0]--;
 		}
+		
+		if($dif[1] > 23)
+		{
+			$dif[1] -= 24;
+			$dif[0]++;
+		}
+
 		return $dif[0].'d '. $dif[1].'h'; 
 	}
 	public static function printStatisticsTableHeader()
@@ -238,6 +252,31 @@ class Helper{
 			}
 
 			echo '</td>';
+		}
+	}
+
+	public static function getTimeDiff($start, $end)
+	{
+		$datetime1 = new DateTime($start);
+        $datetime2 = new DateTime($end);
+        $dif = $datetime1->Diff($datetime2);
+        return $dif;
+	}
+
+	public static function calculTime(&$total, $last)
+	{
+		$total['h'] += $last->h;
+		$total['i'] += $last->i;
+		$total['s'] += $last->s;
+		
+		if($total['s'] > 60){
+			$total['i']++;
+			$total['s'] -= 60;
+		}
+
+		if($total['i'] > 60){
+			$total['h']++;
+			$total['i'] -= 60;
 		}
 	}
 }

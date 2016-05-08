@@ -1,0 +1,35 @@
+
+
+.days_head{
+	white-space:nowrap;
+	background-color: #cccccc;
+	padding: 5px 5px 5px 5px;	
+}
+
+.days{
+	background-color:#d9d9d9;	
+}
+
+.time_management_table td{
+	width: 100px;
+	height:50px;
+	border: 1px solid white;
+	text-align: center;
+}
+
+#date_container span{
+	padding:6px;
+}
+
+#current_date{
+	padding:10px;	
+	width:50px;
+}
+
+.week{
+	background-color: #ffcccc;
+}
+
+.today{
+	color:red;
+}

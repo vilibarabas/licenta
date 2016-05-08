@@ -11,15 +11,6 @@ $conectInfo = array(
 
 $m = new model($conectInfo);
 
+$min = isset($_POST['min']) ? intval(explode(':', $_POST['min'])[1]) : 1;
 
-$data = date("d-m-Y :i:s");
-$hr = date("H")+1;
-
-if($hr < 10)
-{
-	$hr = '0'. $hr;
-}
-$data2 = explode(" ", $data);
-$data = $data2[0]. ' '.$hr. $data2[1];
-
-$m->addTime($_POST['userId'], $data, $_POST['start']);
+$m->addTime($_POST['userId'], $_POST['start'], $min);

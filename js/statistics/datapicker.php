@@ -144,7 +144,7 @@
           }
           else
           {
-            self.currentMonth = 12;
+            self.currentMonth = 11;
             self.currentYear--;
             self.d.setYear(self.currentYear);
             self.currentDate = weeks(Days(self.d, self.currentMonth));
@@ -212,10 +212,6 @@
     }
     .days_body{
       background-color:blue;
-    }
-    td{
-      width:50px;
-      height:50px;
     }
   </style>
 </head>

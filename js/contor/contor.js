@@ -3,6 +3,7 @@ var h1 ;
 var s1 ;
 var stop =0;
 function startTime() {
+    
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -56,6 +57,22 @@ function startTime() {
     document.getElementById('msg').innerHTML = msg;
     document.getElementById('txt').innerHTML = hp + 
     h + ":" + hm + m + ":" + hs + s;
+    var total = getTotal();
+    t_hr = parseInt(h) + parseInt(total[0]);
+    t_m = parseInt(m) + parseInt(total[1]);
+    t_s = parseInt(s) + parseInt(total[2]);
+    if(t_s > 59){
+        t_s -= 60;
+        t_m++;
+    }
+    if(t_m > 59){
+        t_m -= 60;
+        t_hr++;
+    }
+    hp = (t_hr < 10) ? "0" : "";
+    hm = (t_m < 10) ? "0" : "";
+    hs = (t_s < 10) ? "0" : "";
+    document.getElementById('total_hours').innerHTML = hp + t_hr + ":" + hm + t_m + ":" + hs + t_s;
     var t = setTimeout(startTime, 500);
 }
 function checkTime(i) {
@@ -81,6 +98,10 @@ function clickstop()
     document.getElementById("stop_button").style.display  = "none";
     setTimeout(function(){
     window.location.reload();
-  },1000);
+    },1000);
 }
 
+function getTotal(){
+    var total = document.getElementById('total_time').value;
+    return total.split(':');
+}
