@@ -26,9 +26,9 @@ if($_GET['send'])
 			$mail->SMTPSecure = "ssl"; 
 			$mail->Host = "plus.smtp.mail.yahoo.com";
 			$mail->Port = 465; // set the SMTP port
-			$mail->Username = $email;
-			$mail->Password = "123ewq321"; 
-			$mail->From = $email;
+			$mail->Username = 'licenta.raport@yahoo.com';
+			$mail->Password = "12345qwert"; 
+			$mail->From = 'licenta.raport@yahoo.com';
 			$mail->FromName = $_GET['user'];
 			$mail->AddAddress($email);
 			$mail->Subject = "Raport ". $date;
@@ -53,7 +53,6 @@ $conectInfo = array(
            'username' => 'root',
            'password' => '',
            );
-
 
 $m = new model($conectInfo);
 
