@@ -40,6 +40,12 @@ class Controller
                                             '<script src="js/raport/ajax.js"></script>',
                                             
                                             ),
+                          'raport_manager' => array(
+                                            '<link rel="stylesheet" type="text/css" href="style/raport.css">',
+
+                                            '<script src="js/raport/datapicker.js"></script>',
+                                            '<script src="js/raport/ajax.js"></script>',
+                                            ),
                           'time_management' => array(
                                             '<link rel="stylesheet" type="text/css" href="style/time_management.css">',
                                             '<script src="js/contor/time_management.js"></script>',

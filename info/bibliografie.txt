@@ -1,18 +1,45 @@
 profil picture img:
+accesat 04.06.2016 12:26
 http://blog.ramboll.com/fehmarnbelt/wp-content/themes/ramboll2/images/profile-img.jpg
 monitor img:
+accesat 04.06.2016 12:26
 http://www.drfoster.com/wp-content/themes/telstra/img/tools__monitor@2x.png
 unitate img:
+accesat 04.02.2016 12:26
 http://cdn.clubafaceri.ro/clients/53/100346/15/unitate-pc-hp-dc7800-3649751_big.jpg
 tastatura img:
+accesat 04.06.2016 12:26
 https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQL7090uNwO59LyGfvOwzIfLXjT4Dwsin2q6YHVMd0zXa_2s53D
 mouse img:
+accesat 04.06.2016 12:26
 http://4.grgs.ro/images/products/1/4/260143/normal/comfort-mouse-6000-0c48603aeb51c69e087f1637dc32ebb4.jpg
 casti img:
+accesat 04.06.2016 12:26
 https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbNDDEU-31DDZknR8w3ovUBTUKwXpaseSDGEao3Xd5GNzB1_9J
 login style
+accesat 04.06.2016 12:26
 http://bootsnipp.com/similar/a6Pdk
 
 menu img:
 accesat 02.05.2016 18:04:00
 https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQRnAJr8UnvzXqHRSbkEujhjAHL8SRvN1ESYIDGqxdIBdaj4Wi5
+
+
+class mailing: 
+phpMailer.php 
+accesat 04.06.2016 12:30
+https://sourceforge.net/projects/phpmailer/
+
+
+smitp.php
+accesat 04.06.2016 12:30
+https://github.com/PHPMailer/PHPMailer/blob/master/class.smtp.php
+
+
+bootstrap 3.3.6 
+accesat 04.06.2016 13:00
+http://getbootstrap.com/getting-started/#download
+
+opis database
+accesat 04.06.2016 13:38
+https://github.com/opis/database

@@ -16,7 +16,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h3>Raport</h3>
+                <h3>Raport | 
+                <?php
+                  if($_SESSION['UserData']->acces_index == 2) {
+                    echo '<a class="btn btn-info" href="raport_manager.php"><span class="glyphicon glyphicon-list"></span> Verifica Raport</a>';
+                  }
+                ?></h3>
             </div>
             <div class="col-md-8">
                 <div class="raport_send_succes">

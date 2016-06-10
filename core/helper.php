@@ -215,17 +215,30 @@ class Helper{
 
 	public static function timeCalculTotal($estim, $work)
 	{
+		$work = preg_replace("/^(d)/", "0d", $work);
+		
 		$estim = str_replace(array('h', 'd'), '', explode(' ', $estim));
 		$work = str_replace(array('h', 'd'), '', explode(' ', $work));	
+		if($estim[0] < 0)
+			$estim[1] *= -1;
+
 
 		$dif[0] = $estim[0] + $work[0];
 		$dif[1] = $estim[1] + $work[1];
-		if($dif[1] < 0 && $dif[0] > 0)
+
+		if(($dif[1] < 0 && $dif[0] > 0))
 		{
 			$dif[1] += 24;
 			$dif[0]--;
 		}
-		
+		elseif($estim[1] < 0 && $dif[0] != 0 && $estim[1] < $work[1])
+		{
+			$dif[1] = 24 - $dif[1];
+			if($dif[0] < 0)
+				$dif[0]++;
+			else
+				$dif[0]--;
+		}		
 		if($dif[1] > 23)
 		{
 			$dif[1] -= 24;
@@ -278,6 +291,47 @@ class Helper{
 			$total['h']++;
 			$total['i'] -= 60;
 		}
+	}
+
+	public static function printRaport($raport) {
+		echo '
+		<div class="container">   
+			<center><h3>Raport</h3></center>
+			<div class="row">
+				<div class="aaa8">
+					<div class="bs-callout bs-callout-warning">
+						<div class="row">
+				    		
+						      <p><strong>Utilizator: </strong>', $raport->name,'</p>
+				  		</div>
+				  		<br>
+						<div class="row">
+							
+							  <p><strong>Data expedierii:</strong> ', $raport->date,'</p>
+
+						</div>
+						
+					</div>
+				</div>
+		  	</div>
+
+		  	<div class="row">
+			  	
+			  		<div class="bs-callout bs-callout-warning">
+			  		
+			  			<div class="row">
+							<div class="col-sm-3">
+							  <p> <strong>Continut:</strong></p>
+							  
+							</div>
+						</div>
+						<br>
+			  		', $raport->raport,'
+			  		</div>
+			  	
+		  </div>
+		</div>
+		';
 	}
 }
 

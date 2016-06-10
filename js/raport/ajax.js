@@ -16,4 +16,15 @@ $(document).ready(function (){
 			$('.raport_send_succes').html(result);
 		});
 	});
+	$('#get_raport').click( function(){
+		$(".loader").fadeIn();
+		$.ajax({
+			url:"ajax/raport/get_raport.php",
+			type:"GET",
+			data: {user:$('#select_user').val(),data:$('.datepicker').val()}
+		}).done(function(result){
+			$(".loader").fadeOut();
+			$('.raport_get').html(result);
+		});
+	});
 });

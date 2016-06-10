@@ -102,16 +102,19 @@
 											 $id = -1;
 											
 											if(empty($task))
+											{
 												$task = $controller->model->getTask($id, $_SESSION['UserData']->user_id);
+												
+											}
 											
-										if(isset($task->priority))
-										{
-											echo '<tr>
-														<td>
-															<div class="alert alert-danger">This is the priority Task</div>
-														</td>
-													</tr>';
-										}
+											if(isset($task->priority))
+											{
+												echo '<tr>
+															<td>
+																<div class="alert alert-danger">This is the priority Task</div>
+															</td>
+														</tr>';
+											}
 
 										?>
 

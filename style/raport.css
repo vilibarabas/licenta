@@ -1,0 +1,79 @@
+.bs-callout {
+
+padding: 20px;
+margin: 20px 0;
+border: 1px solid #0066ff;
+border-left-width: 5px;
+border-radius: 3px;
+}
+
+.bs-callout h4 {
+margin-top: 0;
+margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+margin-bottom: 0;
+}
+
+ .datapicker_header{
+      background-color: #FFFFFF;
+    }
+    #date_container{
+      display: none;
+    }
+    #datapicker_container{
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      width:250px;
+      background-color: #f2f2f2;
+      position: absolute;
+    }
+    td{
+      height: 20px;
+      width: 20px;
+      border: 2px solid #FFFFFF;
+      text-align: center;
+      border-radius: 4px;
+      background-color: #d9d9d9;
+    }
+    td:not(.datapicker_header):hover{
+      background-color: #1a1aff;
+      color: #FFFFFF;
+    }
+    .active{
+      color:red;
+    }
+    
+    #mounth_cont{
+      background-color: #ff471a;
+      border:1px solid #FFFFFF;
+      border-radius: 5px;
+    }
+    .datapicker_table {
+        width:240px;
+        margin: 5px 5px 5px 5px;
+    }
+
+    #date_container div a {
+        width:20px;
+        text-decoration: none;
+    }
+    #date_container div div{
+        padding: 0 0 0 0 ;
+    }
+    #mounth_cont{
+        margin: 0 0 0 0 ;
+    }
+    #current_data {
+        width:200px;
+    }
+    #data_input{
+        margin-top:10px;
+    }
+    #data_input input {
+        width:180px;
+    }
+    #select_container{
+        margin: 5px 5px 5px 5px;
+    }

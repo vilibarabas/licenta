@@ -83,16 +83,20 @@ SetData.prototype.nextYear = function(){
 }
 
 function Info(elements){
+    var timer = 0;
         $(elements).hover(function(e) {
-        $($(this).children()).css({
-            left: e.pageX + 5,
-            top: e.pageY -150
-        }).stop().show(100);
+            var self = $(this);
+            timer = setTimeout(function() {
+                $(self.children()).css({
+                    left: e.pageX + 5,
+                    top: e.pageY -150
+                }).stop().show(100);
+            }, 500);    
+            
     }, function() {
+        clearTimeout(timer);
         $($(this).children()).hide();
     });
-  
-    
 }
 $(document).ready(function(){
     var element = $('#data_input');

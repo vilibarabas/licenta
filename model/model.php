@@ -802,6 +802,17 @@ class Model
                                          ))
                                          ->into('raport_table');
     }
+
+    public function getRaport($date, $id) {
+        return $this->dataBase->from('raport_table')
+                                ->join(['all_users' => 'a'], function($join){
+                                    $join->on('a.user_id', 'raport_table.user_id');
+                                                     })
+                                ->where('raport_table.user_id')->is($id)
+                                ->andWhere('raport_table.date')->like('%'. $date.'%')
+                                ->select()
+                                ->all(); 
+    }
 }
 
         

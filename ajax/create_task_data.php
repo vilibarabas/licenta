@@ -12,7 +12,10 @@ $conectInfo = array(
 $m = new model($conectInfo);
 if(!empty($_POST['name']) && !empty($_POST['description']) && !empty($_POST['observation']) && !empty($_POST['time']) && is_numeric($_POST['time'])) 
 {
-	$m->createProject($_POST['name'], $_POST['description'], $_POST['observation'], $_POST['time']);
+  $time_h = $_POST['time'] % 24;
+  $time_d = ($_POST['time'] - $time_h ) /24;
+  $time = $time_d. 'd '. $time_h. 'h';
+	$m->createProject($_POST['name'], $_POST['description'], $_POST['observation'], $time);
 	echo '
     <div class="alert alert-success">
 

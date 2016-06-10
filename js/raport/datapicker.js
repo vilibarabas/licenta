@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>JS Bin</title>
-  <style type="text/css">
-    .datapicker_header{
-      background-color: #99b3ff;
-    }
-    #date_container{
-      display: none;
-    }
-    .container{
-      width:250px;
-      position: absolute;
-    }
-    td{
-      height: 15px;
-      text-align: center;
-    }
-    td:not(.datapicker_header):hover{
-      background-color: #b3d1ff;
-    }
-    .active{
-      color:red;
-    }
-
-    #mounth_cont{
-      background-color: #b3d1ff;
-    }
-  </style>
-  <script>
-
-      var Month = [
+var Month = [
         'January',
         'February',
         'March',
@@ -116,12 +80,17 @@
         };
         this.setCurrentMonth();
         var self = this;
-        this.element.on('click', function() {
-          self.dateContainer.show();
-        });
 
+        this.element.on('click', function(event) {
+          self.dateContainer.show();
+          event.stopPropagation();   
+        })
+        $('body').on('click', function() {
+          self.dateContainer.hide();     
+        });
         this.createDateTable(this.currentDate);
-        $('#next_month').on('click', function() {
+        $('#next_month').on('click', function(event) {
+          event.stopPropagation(); 
           self.currentMonth++;
 
           if(self.currentMonth < 12)
@@ -138,9 +107,9 @@
             self.recreateDatapicker();
           }
         });
-        $('#previev_month').on('click', function() {
+        $('#previev_month').on('click', function(event) {
           self.currentMonth--;
-
+          event.stopPropagation(); 
           if(self.currentMonth >= 0)
           {
             self.currentDate = weeks(Days(self.d, self.currentMonth));
@@ -179,6 +148,7 @@
         this.dateContainer.append(dateContainer);
         var self = this;
         $('.days').on('click', function(event) {
+            
             $('.active').removeClass('active');
             var day_click = $(event.target);
             var date = day_click.text() + "/" + Month[self.currentMonth] + "/" + self.currentYear;
@@ -207,25 +177,3 @@
       $(document).ready(function(){
          new Datapicker($('.datepicker'));
       });
-
-
-  </script>
-  <style>
-    .days_header{
-      background-color:red;
-    }
-    .days_body{
-      background-color:blue;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <p id="data_input"><laber>Date:</laber><input type="text" class="datepicker"/></p>
-
-    <div id="date_container">
-      <center><p id="mounth_cont"><input type="button" id="previev_month" value=" < "/><span id="current_date"></span><input type="button" id="next_month" value = " > "/></p></center>
-    </div>
-  </div>
-</body>
-</html>
